@@ -1,4 +1,4 @@
-import type { BBox } from "./geometry";
+import { pointInPolygon, type BBox, type Vec2 } from "./geometry";
 
 /** A4 portrait in cm. */
 export const PAGE = { w: 21, h: 29.7 };
@@ -72,4 +72,43 @@ export function tilePiece(bbox: BBox, margin = 1.2, allowRotate = true): Tiling 
     for (let c = 0; c < best.cols; c++)
       tiles.push({ row: r, col: c, label: `${rowLabel(r)}${c + 1}`, x: x0 + c * stepX, y: y0 + r * stepY });
   return { rotate: best.rotate, rows: best.rows, cols: best.cols, tiles, box: best.box };
+}
+
+function segIntersectsRect(a: Vec2, b: Vec2, x0: number, y0: number, x1: number, y1: number) {
+  // Liang–Barsky clipping
+  let t0 = 0;
+  let t1 = 1;
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const p = [-dx, dx, -dy, dy];
+  const q = [a[0] - x0, x1 - a[0], a[1] - y0, y1 - a[1]];
+  for (let i = 0; i < 4; i++) {
+    if (p[i] === 0) {
+      if (q[i] < 0) return false;
+    } else {
+      const r = q[i] / p[i];
+      if (p[i] < 0) t0 = Math.max(t0, r);
+      else t1 = Math.min(t1, r);
+      if (t0 > t1) return false;
+    }
+  }
+  return true;
+}
+
+/** Whether a tile (A4 page) shows any part of the outline (rotated like the tiling if needed). */
+export function tileHasContent(outline: readonly Vec2[], tile: Tile, rotate: boolean, page = PAGE) {
+  const pts: Vec2[] = rotate ? outline.map(([x, y]) => [-y, x] as Vec2) : [...outline];
+  const x0 = tile.x;
+  const y0 = tile.y;
+  const x1 = tile.x + page.w;
+  const y1 = tile.y + page.h;
+  for (let i = 0; i < pts.length; i++) {
+    if (segIntersectsRect(pts[i], pts[(i + 1) % pts.length], x0, y0, x1, y1)) return true;
+  }
+  return pointInPolygon([(x0 + x1) / 2, (y0 + y1) / 2], pts);
+}
+
+/** Tiles of a piece that actually carry part of it (blank grid cells are skipped). */
+export function contentTiles(outline: readonly Vec2[], tiling: Tiling) {
+  return tiling.tiles.filter((t) => tileHasContent(outline, t, tiling.rotate));
 }

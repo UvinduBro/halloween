@@ -325,5 +325,9 @@ html[data-gate="open"] .gate {
   .print-sheet {
     box-shadow: none !important;
     margin: 0 !important;
+    zoom: 1 !important;
+  }
+  main {
+    z-index: auto !important;
   }
 }

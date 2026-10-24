@@ -3,7 +3,7 @@ import { ruviDefaults } from "@/data/ruvi";
 import { dressPattern, maskDims } from "@/lib/ruvi";
 import { uviDefaults } from "@/data/uvi";
 import { uviVars } from "@/lib/uvi";
-import { countPages, rowLabel, tilePiece } from "@/lib/tiling";
+import { contentTiles, countPages, rowLabel, tilePiece } from "@/lib/tiling";
 import { ruviTemplates, uviTemplates } from "@/lib/templates";
 
 describe("ruvi dress pattern (6.3)", () => {
@@ -71,6 +71,17 @@ describe("tiling", () => {
     const t = tilePiece({ minX: 0, minY: 0, maxX: 50, maxY: 50 }, 0, false);
     expect(t.tiles[1].x - t.tiles[0].x).toBeCloseTo(20);
     expect(t.tiles[t.cols].y - t.tiles[0].y).toBeCloseTo(28.7);
+  });
+  it("skips tiles that carry no part of the piece", () => {
+    const tri = [
+      [0, 0],
+      [60, 0],
+      [60, 80],
+    ] as [number, number][];
+    const t = tilePiece({ minX: 0, minY: 0, maxX: 60, maxY: 80 }, 0, false);
+    const used = contentTiles(tri, t);
+    expect(used.length).toBeLessThan(t.tiles.length);
+    expect(used.length).toBeGreaterThan(0);
   });
   it("generates templates for both characters", () => {
     expect(uviTemplates(uviDefaults).length).toBeGreaterThanOrEqual(6);

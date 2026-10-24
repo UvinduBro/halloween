@@ -41,6 +41,8 @@ export interface TemplatePiece {
   paths: TemplatePath[];
   labels: TemplateLabel[];
   bbox: BBox;
+  /** Outer outline, used to skip blank tiles. */
+  outline: Vec2[];
 }
 
 /** Flat coordinates are y-up; SVG is y-down. */
@@ -76,8 +78,8 @@ function edgeLabels(pts: readonly Vec2[], skip: number[] = [], inwardShift = 1.6
   return out;
 }
 
-function finish(piece: Omit<TemplatePiece, "bbox">, outline: Vec2[]): TemplatePiece {
-  return { ...piece, bbox: bbox2D(outline) };
+function finish(piece: Omit<TemplatePiece, "bbox" | "outline">, outline: Vec2[]): TemplatePiece {
+  return { ...piece, bbox: bbox2D(outline), outline };
 }
 
 /* ------------------------------------------------------------------ */
@@ -281,7 +283,7 @@ export function ruviTemplates(m: RuviMeasurements): TemplatePiece[] {
           labels: [
             ...edgeLabels(stitch, [stitch.length - 1], 2),
             ...marks.labels,
-            { x: -0.8, y: p.L / 2, text: "PLACE ON FOLD", size: 1.1, rotate: -90 },
+            { x: 1.2, y: p.L / 2, text: "PLACE ON FOLD", size: 1.1, rotate: -90 },
             { x: p.half.hips / 2 + 1, y: p.L * 0.55, text: "DRESS BACK", size: 1.6 },
             { x: p.half.hips / 2 + 1, y: p.L * 0.55 + 2, text: "grain ↕", size: 0.9 },
           ],
