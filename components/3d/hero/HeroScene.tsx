@@ -20,6 +20,7 @@ export interface HeroSceneProps {
   flashlight: boolean;
   onSelect: (id: CharacterId) => void;
   plates: React.RefObject<Record<CharacterId, HTMLElement | null>>;
+  onReady?: () => void;
 }
 
 /* ------------------------------------------------------------------ */
@@ -260,6 +261,9 @@ function PlateProjector({ plates, positions }: { plates: HeroSceneProps["plates"
       v.set(p[0], p[1] - 0.05, p[2] + 0.2).project(camera);
       const x = ((v.x + 1) / 2) * size.width;
       const y = ((1 - v.y) / 2) * size.height;
+      el.style.left = "0px";
+      el.style.top = "0px";
+      el.style.bottom = "auto";
       el.style.transform = `translate3d(${x.toFixed(1)}px, ${Math.min(y, size.height - 70).toFixed(1)}px, 0) translate(-50%, 0)`;
     }
   });
@@ -292,7 +296,18 @@ function Figure({ id, asset, ...rest }: FigureProps & { asset: HeroAsset }) {
   }
 }
 
-export default function HeroScene({ assets, motion, mobile, flashlight, onSelect, plates }: HeroSceneProps) {
+/** Signals readiness once the figures (and their textures) have rendered a frame. */
+function Ready({ onReady }: { onReady?: () => void }) {
+  const done = useRef(false);
+  useFrame(() => {
+    if (done.current) return;
+    done.current = true;
+    onReady?.();
+  });
+  return null;
+}
+
+export default function HeroScene({ assets, motion, mobile, flashlight, onSelect, plates, onReady }: HeroSceneProps) {
   const spread = mobile ? 0.62 : 0.95;
   const positions: Record<CharacterId, [number, number, number]> = {
     uvi: [-spread, 0, 0],
@@ -338,6 +353,7 @@ export default function HeroScene({ assets, motion, mobile, flashlight, onSelect
             onSelect={onSelect}
           />
         ))}
+        <Ready onReady={onReady} />
       </Suspense>
       <FogSheets motion={motion} mobile={mobile} />
       <FitCamera halfWidth={spread + 0.55} />

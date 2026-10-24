@@ -62,7 +62,7 @@ export function StepList({
                 </label>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-heading text-lg text-bandage">
-                    <span className="mr-2 text-blood-bright">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="mr-2 text-blood-text">{String(i + 1).padStart(2, "0")}</span>
                     {s.title}
                   </h3>
                   <RT as="p" className="mt-1 text-fog" text={s.text} />

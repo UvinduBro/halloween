@@ -10,6 +10,7 @@ import { helmetAssembly, knifeAssembly } from "@/data/uvi";
 import type { AssemblyStep } from "@/data/types";
 import { useIsMobile, useMotionAllowed } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
+import { renderText } from "@/lib/units";
 import { buildHelmet } from "@/lib/uvi";
 import { useUviVars } from "@/lib/hooks";
 import { CameraLink, CameraRig, SceneLights, ViewerContext, type Focus, type ViewerSettings } from "./shared";
@@ -346,7 +347,7 @@ export default function BuildViewer({
                 )}
                 <p className="mt-2 text-fog" aria-live="polite">
                   <span className="font-heading text-bandage">{assembly[step].title}. </span>
-                  {assembly[step].text}
+                  {renderText(assembly[step].text, unit)}
                 </p>
               </div>
             )}

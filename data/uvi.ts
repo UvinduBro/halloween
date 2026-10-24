@@ -356,9 +356,9 @@ export const helmetAssembly: AssemblyStep[] = [
   { title: "Side panels", text: "Tape the sides to the centre front at about 130°.", pieces: ["sideL", "sideR"] },
   { title: "Back panels", text: "Tape the backs together along the ridge at about 120°.", pieces: ["backL", "backR"] },
   { title: "Close the shell", text: "Join sides to backs; check the 20° lean, hot glue inside.", pieces: [] },
-  { title: "Formers", text: "Crown former at z = 32, top former at z = 50.", pieces: ["crown", "top"] },
-  { title: "Seam strips", text: "5 cm strips inside every seam, 4 cm round the bottom edges.", pieces: ["strips"] },
-  { title: "Mount the hat", text: "Hard hat under the crown former, forehead ~4 cm behind the centre face.", pieces: [] },
+  { title: "Formers", text: "Crown former at z = {32}, top former at z = {50}.", pieces: ["crown", "top"] },
+  { title: "Seam strips", text: "{5} strips inside every seam, {4} round the bottom edges.", pieces: ["strips"] },
+  { title: "Mount the hat", text: "Hard hat under the crown former, forehead ~{4} behind the centre face.", pieces: [] },
   { title: "Mesh and finish", text: "Black mesh over the window, papier-mâché, edges and rivets.", pieces: ["mesh"] },
 ];
 
@@ -471,9 +471,9 @@ export const knifeSteps: StepGroup = {
 
 export const knifeAssembly: AssemblyStep[] = [
   { title: "Outer layer", text: "First outer blade layer.", pieces: ["layer1"] },
-  { title: "Middle layer", text: "Middle layer with the 3 × 15 cm pipe slot.", pieces: ["layer2"] },
-  { title: "Pipe", text: "45 cm of 25 mm PVC, 15 cm inside the blade.", pieces: ["pipe"] },
-  { title: "Close it", text: "Third layer glued on; sand a 3 cm bevel.", pieces: ["layer3"] },
+  { title: "Middle layer", text: "Middle layer with the {3} × {15} pipe slot.", pieces: ["layer2"] },
+  { title: "Pipe", text: "{45} of {mm:25} PVC, {15} inside the blade.", pieces: ["pipe"] },
+  { title: "Close it", text: "Third layer glued on; sand a {3} bevel.", pieces: ["layer3"] },
   { title: "Grip and pad", text: "Fabric-wrapped grip and felt drag pad.", pieces: ["grip", "pad"] },
 ];
 
@@ -620,3 +620,9 @@ export const uviLiveNumbers: { label: string; text: string }[] = [
   { label: "Vision window", text: "{$winStart} up, {$winHeight} tall, {$winBottomW} → {$winTopW}" },
   { label: "Skirt", text: "{$skirtWidth|0} wide × {$skirtLength|0} long" },
 ];
+
+/** Short blurbs for the 3D tab. */
+export const uviViewBlurbs: Record<string, string> = {
+  helmet: "Built from the exact vertices of the cut list. Switch to Side to check the 20° lean of the centre face.",
+  knife: "Three laminated layers and a PVC pipe. Explode it to see the slot in the middle layer.",
+};

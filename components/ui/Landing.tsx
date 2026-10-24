@@ -12,20 +12,12 @@ import { heroPointer, useHero, type HeroAsset } from "@/lib/heroState";
 import { useIsMobile, useMotionAllowed } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { useCutNavigate } from "@/lib/transition";
+import { useInteracted } from "@/lib/interaction";
 import { Countdown } from "./Countdown";
+import { HeroPoster } from "./HeroPoster";
 import { Portal } from "./Portal";
 
-function HeroSkeleton() {
-  return (
-    <div className="absolute inset-0 flex items-end justify-center gap-[18%] pb-[8%]" role="status" aria-label="Loading the figures in the fog">
-      {[0, 1].map((i) => (
-        <div key={i} className="h-[62%] w-[16%] max-w-32 animate-pulse rounded-t-full bg-gradient-to-b from-fog/10 to-transparent blur-sm" />
-      ))}
-    </div>
-  );
-}
-
-const HeroScene = dynamic(() => import("@/components/3d/hero/HeroScene"), { ssr: false, loading: () => <HeroSkeleton /> });
+const HeroScene = dynamic(() => import("@/components/3d/hero/HeroScene"), { ssr: false, loading: () => null });
 
 /** Deterministic scratch texture revealed by the cursor "flashlight" on the hero. */
 const SCRATCHES = (() => {
@@ -115,6 +107,7 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
   const stageRef = useRef<HTMLDivElement>(null);
   const plates = useRef<Record<CharacterId, HTMLElement | null>>({ uvi: null, ruvi: null });
   const [mount3D, setMount3D] = useState(false);
+  const [ready3D, setReady3D] = useState(false);
   const [blackout, setBlackout] = useState(false);
   const [assets, setAssets] = useState(detected);
   const tilt = useTiltPermission(mobile);
@@ -127,16 +120,10 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
     }
   }, []);
 
-  // Keep 3D out of first paint: mount the canvas when the browser is idle.
-  useEffect(() => {
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
-    if (w.requestIdleCallback) {
-      const id = w.requestIdleCallback(() => setMount3D(true), { timeout: 1500 });
-      return () => (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(id);
-    }
-    const id = setTimeout(() => setMount3D(true), 700);
-    return () => clearTimeout(id);
-  }, []);
+  // Keep 3D out of first paint and off the main thread until someone is actually here:
+  // the WebGL scene mounts on the first interaction (after the content gate is closed).
+  const interacted = useInteracted();
+  const show3D = mount3D || interacted;
 
   useEffect(() => () => select(null), [select]);
 
@@ -220,7 +207,7 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
         <div className="relative z-10 mx-auto max-w-6xl px-4 pt-10 text-center sm:pt-14">
           <p className="font-heading text-xs uppercase tracking-[0.45em] text-sick">Halloween · 31.10.2026 · Colombo</p>
           <h1 id="hero-title" className={`mt-3 font-heading text-6xl leading-none text-bandage sm:text-8xl md:text-9xl ${motion ? "glitch" : ""}`}>
-            UVI <span className="text-blood-bright">&amp;</span> RUVI
+            UVI <span className="text-blood-text">&amp;</span> RUVI
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-fog">Two Halloween builds, measured to the centimetre. Choose who you follow into the fog.</p>
           <div className="mt-6">
@@ -229,10 +216,19 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
         </div>
 
         <div ref={stageRef} className="relative z-10 mx-auto mt-4 h-[64svh] min-h-[420px] w-full max-w-6xl sm:h-[70vh]">
-          {mount3D ? (
-            <HeroScene assets={assets} motion={motion} mobile={mobile} flashlight={flashlight} onSelect={onSelect} plates={plates} />
-          ) : (
-            <HeroSkeleton />
+          {!ready3D && <HeroPoster assets={assets} mobile={mobile} />}
+          {show3D && (
+            <div className={`absolute inset-0 transition-opacity duration-700 ${ready3D ? "opacity-100" : "opacity-0"}`}>
+              <HeroScene
+                assets={assets}
+                motion={motion}
+                mobile={mobile}
+                flashlight={flashlight}
+                onSelect={onSelect}
+                plates={plates}
+                onReady={() => setReady3D(true)}
+              />
+            </div>
           )}
           {/* Rusted name plates: real buttons, positioned under each figure by the scene */}
           {(["uvi", "ruvi"] as CharacterId[]).map((id) => (
@@ -241,8 +237,8 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
               ref={(el) => {
                 plates.current[id] = el;
               }}
-              className="absolute left-0 top-0 flex flex-col items-center"
-              style={{ transform: `translate3d(${id === "uvi" ? "25vw" : "75vw"}, 50vh, 0) translate(-50%, 0)` }}
+              className="absolute flex flex-col items-center"
+              style={{ left: `${id === "uvi" ? (mobile ? 24 : 30) : mobile ? 76 : 70}%`, bottom: "3%", transform: "translateX(-50%)" }}
             >
               <button
                 type="button"
@@ -263,7 +259,10 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
             <button
               type="button"
               aria-pressed={flashlight}
-              onClick={() => setFlashlight(!flashlight)}
+              onClick={() => {
+                setMount3D(true);
+                setFlashlight(!flashlight);
+              }}
               className={`min-h-11 border px-3 text-xs uppercase tracking-widest backdrop-blur ${flashlight ? "border-bandage bg-bandage/10 text-bandage" : "border-fog/30 bg-ash/60 text-fog"}`}
             >
               {flashlight ? "Lights on" : "Flashlight"}
@@ -291,7 +290,7 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
               style={{ animationDelay: `${0.9 + i * 0.35}s` }}
             >
               <p className="font-heading text-xs uppercase tracking-[0.35em] text-sick">Worn by {meta[id].wearer}</p>
-              <h2 className="mt-2 font-heading text-5xl text-bandage group-hover:text-blood-bright">{meta[id].name}</h2>
+              <h2 className="mt-2 font-heading text-5xl text-bandage group-hover:text-blood-text">{meta[id].name}</h2>
               <p className="mt-1 font-heading text-lg text-fog">{meta[id].build}</p>
               <p className="mt-4 text-fog-dim">{meta[id].tagline}.</p>
               <span className="mt-6 inline-flex min-h-11 items-center text-sm uppercase tracking-widest text-bandage">Open the build →</span>

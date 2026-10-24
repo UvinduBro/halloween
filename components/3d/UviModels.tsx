@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { helmetAssembly, helmetFaces, helmetSpec, knifeAssembly, knifeSpec, type HelmetFaceId } from "@/data/uvi";
 import { add, centroid3, faceFrame, mul, normalize, sub, type Vec2, type Vec3 } from "@/lib/geometry";
 import { useUviVars } from "@/lib/hooks";
+import { fmtLen } from "@/lib/units";
 import { buildHelmet, type HelmetBuilt } from "@/lib/uvi";
 import { EdgeLabel, Mannequin, PALETTES, Piece, useGrimeMaterial, useViewer, ZUp, type Focus } from "./shared";
 
@@ -229,6 +230,7 @@ export const knifeFocus: Focus = { target: [0, 0, 0], radius: 0.8, half: [0.78, 
 export function KnifeModel() {
   const card = useGrimeMaterial(PALETTES.cardboard);
   const pvc = useGrimeMaterial(PALETTES.pvc, { finished: false });
+  const { unit } = useViewer();
   const fabric = useGrimeMaterial(PALETTES.fabric);
   const felt = useGrimeMaterial(PALETTES.felt, { finished: false });
   const t = knifeSpec.layerThickness;
@@ -264,7 +266,7 @@ export function KnifeModel() {
       </Piece>
       <Piece dir={[0, 0, 0]} appearAt={appearAt(knifeAssembly, "layer2")}>
         <mesh geometry={geos.middle} material={card} position={[0, 0, -t / 2]} />
-        <EdgeLabel position={[7.5, slotY - 4, 1]} text="pipe slot 3 × 15" />
+        <EdgeLabel position={[7.5, slotY - 4, 1]} text={`pipe slot ${fmtLen(knifeSpec.slot.w, unit)} × ${fmtLen(knifeSpec.slot.l, unit)}`} />
       </Piece>
       <Piece dir={[-1, 0, 0]} distance={20} appearAt={appearAt(knifeAssembly, "pipe")}>
         <mesh position={[pipeCentreX, slotY, 0]} rotation={[0, 0, Math.PI / 2]} material={pvc}>
@@ -285,7 +287,7 @@ export function KnifeModel() {
         </mesh>
       </Piece>
       <EdgeLabel position={[50, 3, 0]} lengthCm={100} />
-      <EdgeLabel position={[60, -27, 0]} text={`blade ${knifeSpec.blade} · grip ${knifeSpec.grip}`} />
+      <EdgeLabel position={[60, -27, 0]} text={`blade ${fmtLen(knifeSpec.blade, unit)} · grip ${fmtLen(knifeSpec.grip, unit)}`} />
       <EdgeLabel position={[-3, -16, 0]} lengthCm={20} />
       <EdgeLabel position={[124, -18, 0]} lengthCm={30} />
     </group>

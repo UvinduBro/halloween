@@ -16,6 +16,7 @@ const specialElite = Special_Elite({
   subsets: ["latin"],
   variable: "--font-special-elite",
   display: "swap",
+  fallback: ["Courier New", "Courier", "monospace"],
 });
 
 export const metadata: Metadata = {

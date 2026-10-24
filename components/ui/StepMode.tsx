@@ -1,10 +1,12 @@
 "use client";
 
+import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CharacterId, StepGroup, TimerPreset } from "@/data/types";
 import { LazyViewer } from "@/components/3d/LazyViewer";
 import type { ViewKind } from "@/components/3d/views";
 import { useStore } from "@/lib/store";
+import { useMotionAllowed } from "@/lib/hooks";
 import { triggerCut } from "@/lib/transition";
 import { stepCheckId } from "./StepList";
 import { TimerButton } from "./Timers";
@@ -66,6 +68,8 @@ export function StepMode({
   onClose: () => void;
 }) {
   const [i, setI] = useState(start);
+  const [dir, setDir] = useState(1);
+  const motionOk = useMotionAllowed();
   const checks = useStore((s) => s.checks);
   const toggle = useStore((s) => s.toggleCheck);
   const wake = useWakeLock();
@@ -81,6 +85,7 @@ export function StepMode({
       const n = Math.min(group.steps.length - 1, Math.max(0, i + d));
       if (n === i) return;
       triggerCut();
+      setDir(d > 0 ? 1 : -1);
       setI(n);
     },
     [group.steps.length, i],
@@ -162,30 +167,42 @@ export function StepMode({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:flex-row md:p-8">
-        <div className="flex flex-1 flex-col justify-center md:pr-6">
-          <p className="font-heading text-6xl text-blood-bright" aria-hidden="true">
-            {String(i + 1).padStart(2, "0")}
-          </p>
-          <h2 id="stepmode-title" className="mt-2 font-heading text-4xl text-bandage sm:text-5xl">
-            {step.title}
-          </h2>
-          <RT as="p" className="mt-4 text-2xl leading-relaxed text-fog sm:text-3xl" text={step.text} />
-          {step.tip && <RT as="p" className="mt-4 text-xl text-sick" text={`Tip: ${step.tip}`} />}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 border border-fog/20 px-4 text-lg">
-              <input type="checkbox" className="size-6 accent-[#9FA87A]" checked={!!checks[id]} onChange={() => toggle(id)} />
-              Done
-            </label>
-            {preset && <TimerButton preset={preset} character={character} />}
-          </div>
-        </div>
-        {step.view && (
-          <div className="h-72 shrink-0 md:h-auto md:w-[45%]">
-            <LazyViewer key={`${step.view}-${step.assembly}`} view={step.view as ViewKind} compact fixedStep={step.assembly} title={step.title} />
-          </div>
-        )}
-      </div>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode="wait" initial={false} custom={dir}>
+          <m.div
+            key={i}
+            custom={dir}
+            initial={motionOk ? { opacity: 0, x: dir * 40 } : false}
+            animate={{ opacity: 1, x: 0 }}
+            exit={motionOk ? { opacity: 0, x: dir * -40 } : { opacity: 1 }}
+            transition={{ duration: motionOk ? 0.18 : 0 }}
+            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:flex-row md:p-8"
+          >
+            <div className="flex flex-1 flex-col justify-center md:pr-6">
+              <p className="font-heading text-6xl text-blood-text" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </p>
+              <h2 id="stepmode-title" className="mt-2 font-heading text-4xl text-bandage sm:text-5xl">
+                {step.title}
+              </h2>
+              <RT as="p" className="mt-4 text-2xl leading-relaxed text-fog sm:text-3xl" text={step.text} />
+              {step.tip && <RT as="p" className="mt-4 text-xl text-sick" text={`Tip: ${step.tip}`} />}
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <label className="flex min-h-11 cursor-pointer items-center gap-3 border border-fog/20 px-4 text-lg">
+                  <input type="checkbox" className="size-6 accent-[#9FA87A]" checked={!!checks[id]} onChange={() => toggle(id)} />
+                  Done
+                </label>
+                {preset && <TimerButton preset={preset} character={character} />}
+              </div>
+            </div>
+            {step.view && (
+              <div className="h-72 shrink-0 md:h-auto md:w-[45%]">
+                <LazyViewer key={`${step.view}-${step.assembly}`} view={step.view as ViewKind} compact fixedStep={step.assembly} title={step.title} />
+              </div>
+            )}
+          </m.div>
+        </AnimatePresence>
+      </LazyMotion>
 
       <div className="flex items-center justify-between gap-3 border-t border-fog/10 p-3">
         <button type="button" onClick={() => go(-1)} disabled={i === 0} className="min-h-14 flex-1 border border-fog/20 text-lg disabled:opacity-30 sm:flex-none sm:px-8">

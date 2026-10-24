@@ -92,7 +92,7 @@ export function ProgressBoard() {
             >
               <h3 className="col-span-2 p-3 font-heading text-lg text-bandage md:col-span-1">
                 {day.label}
-                {isToday && <span className="ml-2 block text-xs uppercase tracking-widest text-blood-bright">today</span>}
+                {isToday && <span className="ml-2 block text-xs uppercase tracking-widest text-blood-text">today</span>}
               </h3>
               {(["uvi", "ruvi"] as CharacterId[]).map((who) => (
                 <ul key={who} className="p-3 pt-0 md:pt-3" aria-label={`${who === "uvi" ? "Uvi" : "Ruvi"}, ${day.label}`}>

@@ -58,48 +58,50 @@ export function Gallery() {
           Take a scare-test photo →
         </Link>
       </div>
-      {error && <p className="mt-4 text-blood-bright">{error}</p>}
-      {ready && !photos.length && !error && <p className="mt-10 font-heading text-xl text-fog-dim">Nothing here yet. The frames are waiting.</p>}
-      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {photos.map((p) => (
-          <li key={p.id}>
-            <figure>
-              <div className="grainy-frame">
-                <Image
-                  src={p.url}
-                  alt={p.caption ? `Costume photo: ${p.caption}` : `Costume photo added ${new Date(p.createdAt).toLocaleDateString("en-GB")}`}
-                  width={600}
-                  height={800}
-                  unoptimized
-                  className="aspect-[3/4] h-auto w-full object-cover grayscale-[35%] sepia-[20%]"
-                />
-              </div>
-              <figcaption className="mt-2 flex items-center gap-2">
-                <label className="sr-only" htmlFor={`cap-${p.id}`}>
-                  Caption
-                </label>
-                <input
-                  id={`cap-${p.id}`}
-                  defaultValue={p.caption}
-                  placeholder="Caption"
-                  onBlur={(e) => void updateCaption(p.id, e.target.value)}
-                  className="min-h-11 min-w-0 flex-1 border border-fog/20 bg-ash px-2 text-sm text-bandage"
-                />
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await deletePhoto(p.id);
-                    await refresh();
-                  }}
-                  className="min-h-11 px-3 text-sm text-fog-dim underline hover:text-blood-bright"
-                >
-                  Delete
-                </button>
-              </figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
+      {error && <p className="mt-4 text-blood-text">{error}</p>}
+      <div className="min-h-[16rem]">
+        {ready && !photos.length && !error && <p className="mt-10 font-heading text-xl text-fog-dim">Nothing here yet. The frames are waiting.</p>}
+        <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {photos.map((p) => (
+            <li key={p.id}>
+              <figure>
+                <div className="grainy-frame">
+                  <Image
+                    src={p.url}
+                    alt={p.caption ? `Costume photo: ${p.caption}` : `Costume photo added ${new Date(p.createdAt).toLocaleDateString("en-GB")}`}
+                    width={600}
+                    height={800}
+                    unoptimized
+                    className="aspect-[3/4] h-auto w-full object-cover grayscale-[35%] sepia-[20%]"
+                  />
+                </div>
+                <figcaption className="mt-2 flex items-center gap-2">
+                  <label className="sr-only" htmlFor={`cap-${p.id}`}>
+                    Caption
+                  </label>
+                  <input
+                    id={`cap-${p.id}`}
+                    defaultValue={p.caption}
+                    placeholder="Caption"
+                    onBlur={(e) => void updateCaption(p.id, e.target.value)}
+                    className="min-h-11 min-w-0 flex-1 border border-fog/20 bg-ash px-2 text-sm text-bandage"
+                  />
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await deletePhoto(p.id);
+                      await refresh();
+                    }}
+                    className="min-h-11 px-3 text-sm text-fog-dim underline hover:text-blood-text"
+                  >
+                    Delete
+                  </button>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

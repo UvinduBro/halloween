@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { capSpec, pipeSpec, scalpelSpec } from "@/data/ruvi";
 import { useStore } from "@/lib/store";
 import { dressPattern, maskDims, type MaskDims } from "@/lib/ruvi";
-import { fmtLen } from "@/lib/units";
+import { fmtLen, renderText } from "@/lib/units";
 import type { Vec3 } from "@/lib/geometry";
 import {
   bottomEdgeLine,
@@ -181,7 +181,7 @@ function FitCheck({ d }: { d: MaskDims }) {
         tone="sick"
         text={`gap ${fmtLen(d.gaps[2], unit)} top · ${fmtLen(d.gaps[0], unit)} sides · ${fmtLen(d.gaps[1], unit)} front/back`}
       />
-      <EdgeLabel position={[s[0] + 3, 0, 0]} tone="muted" text="foam pads 1–1.5 cm" />
+      <EdgeLabel position={[s[0] + 3, 0, 0]} tone="muted" text={`foam pads ${renderText("{1–1.5}", unit)}`} />
     </group>
   );
 }

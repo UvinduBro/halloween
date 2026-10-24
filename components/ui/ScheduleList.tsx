@@ -24,7 +24,7 @@ export function ScheduleList({ who }: { who: "uvi" | "ruvi" }) {
         return (
           <li key={day.id} className={`border p-4 ${isToday ? "border-blood-bright bg-blood/15" : "border-fog/10 bg-ash-2/80"}`}>
             <h3 className="font-heading text-lg text-bandage">
-              {day.label} {isToday && <span className="ml-2 text-xs uppercase tracking-widest text-blood-bright">today</span>}
+              {day.label} {isToday && <span className="ml-2 text-xs uppercase tracking-widest text-blood-text">today</span>}
             </h3>
             <ul className="mt-1">
               {tasks.map((t, i) => {

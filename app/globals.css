@@ -10,6 +10,7 @@
   --color-rust-bright: #c06a35;
   --color-blood: #5a0f0f;
   --color-blood-bright: #a33a32;
+  --color-blood-text: #e0685d;
   --color-bandage: #e9e1d0;
   --color-sick: #9fa87a;
 
@@ -58,10 +59,11 @@ h3,
 /* ---------- Atmosphere overlays ---------- */
 
 .grain {
+  will-change: transform;
   position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
   pointer-events: none;
   z-index: 60;
   opacity: 0.09;
@@ -72,8 +74,8 @@ h3,
 @keyframes grain {
   0% { transform: translate(0, 0); }
   20% { transform: translate(-3%, 2%); }
-  40% { transform: translate(2%, -4%); }
-  60% { transform: translate(-4%, -1%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-3%, -1%); }
   80% { transform: translate(3%, 3%); }
   100% { transform: translate(0, 0); }
 }
@@ -87,6 +89,7 @@ h3,
 }
 
 .fog-layer {
+  will-change: transform;
   position: fixed;
   inset: -20%;
   pointer-events: none;
@@ -96,7 +99,6 @@ h3,
     radial-gradient(40% 25% at 20% 70%, rgba(201, 196, 186, 0.12), transparent 70%),
     radial-gradient(35% 20% at 75% 60%, rgba(201, 196, 186, 0.1), transparent 70%),
     radial-gradient(50% 30% at 50% 95%, rgba(201, 196, 186, 0.14), transparent 70%);
-  filter: blur(20px);
   animation: fog-drift 60s ease-in-out infinite alternate;
 }
 

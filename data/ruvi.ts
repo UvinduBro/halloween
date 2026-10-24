@@ -396,7 +396,7 @@ export const dressSteps: StepGroup = {
 export const dressAssembly: AssemblyStep[] = [
   { title: "Back", text: "Back cut on the fold.", pieces: ["back"] },
   { title: "Fronts and sleeves", text: "Two mirrored fronts; kimono sleeves.", pieces: ["front", "sleeves"] },
-  { title: "Buttons", text: "7 buttons on a 2.5 cm overlap.", pieces: ["buttons"] },
+  { title: "Buttons", text: "7 buttons on a {2.5} overlap.", pieces: ["buttons"] },
 ];
 
 export const dressNoSew = "No-sew alternative: alter a bought white shirt dress. Shorten it, crop the sleeves and distress it.";
@@ -635,3 +635,12 @@ export const ruviLiveNumbers: { label: string; text: string }[] = [
   { label: "Sleeve", text: "opening {$sleeveOpening}, shoulder point {$shoulderPoint}" },
   { label: "Dress length", text: "{$dressLength}" },
 ];
+
+/** Short blurbs for the 3D tab. */
+export const ruviViewBlurbs: Record<string, string> = {
+  mask: "From balloon to rot: scrub through the five stages. The split animates open at stage 2.",
+  fit: "Her head inside the shell, with green foam pads and the {2–3} gap.",
+  dress: "Lofted from the pattern half widths: bust, waist, hips and hem follow the Measure tab.",
+  cap: "A {36} ring with a {4} cuff, {9} tall at the front.",
+  pipe: "{60} of pipe, a 45° elbow, a {10} stub and a {12} grip, plus the optional scalpel.",
+};

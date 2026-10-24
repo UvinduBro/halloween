@@ -52,7 +52,7 @@ export function Tabs({ tabs, label }: { tabs: TabDef[]; label: string }) {
 
   return (
     <div>
-      <div className="sticky top-[57px] z-40 -mx-4 border-b border-fog/10 bg-ash/90 px-4 backdrop-blur-md no-print">
+      <div className="sticky top-[57px] z-40 -mx-4 border-b border-fog/10 bg-ash/95 px-4 no-print">
         <div role="tablist" aria-label={label} className="scrollbar-none flex gap-1 overflow-x-auto" onKeyDown={onKey}>
           {tabs.map((t) => {
             const selected = t.id === active;

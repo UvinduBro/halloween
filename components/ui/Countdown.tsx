@@ -22,7 +22,7 @@ export function Countdown({ compact = false }: { compact?: boolean }) {
     : "Countdown to Halloween night, 31 October, 19:00 Colombo time";
 
   if (over) {
-    return <p className="font-heading text-2xl text-blood-bright">It has begun.</p>;
+    return <p className="font-heading text-2xl text-blood-text">It has begun.</p>;
   }
 
   return (

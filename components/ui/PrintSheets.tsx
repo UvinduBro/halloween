@@ -8,7 +8,7 @@ import { useStore } from "@/lib/store";
 import { templatesFor, type TemplatePiece } from "@/lib/templates";
 import { contentTiles, OVERLAP, PAGE, tilePiece, type Tile, type Tiling } from "@/lib/tiling";
 import { fmtLen } from "@/lib/units";
-import { PATH_STYLE, PieceGroup } from "./PieceSvg";
+import { PATH_STYLE, PieceGroup, SvgText } from "./PieceSvg";
 
 const FONT = "Helvetica, Arial, sans-serif";
 
@@ -72,15 +72,15 @@ function TilePage({ piece, tiling, tile, unit, pageNo, total }: { piece: Templat
       </g>
       <CropMarks tiling={tiling} tile={tile} />
       <g fontFamily={FONT}>
-        <text x={PAGE.w - 1.6} y={PAGE.h - 2.1} fontSize="1.4" textAnchor="end" fill="#000" fillOpacity="0.55">
+        <SvgText x={PAGE.w - 1.6} y={PAGE.h - 2.1} size={1.4} textAnchor="end" fill="#000" fillOpacity="0.55">
           {tile.label}
-        </text>
-        <text x={PAGE.w - 1.6} y={PAGE.h - 1.4} fontSize="0.32" textAnchor="end" fill="#333">
+        </SvgText>
+        <SvgText x={PAGE.w - 1.6} y={PAGE.h - 1.4} size={0.32} textAnchor="end" fill="#333">
           {piece.name} · {tiling.rows}×{tiling.cols} · {neighbours.join("  ")}
-        </text>
-        <text x={1.6} y={PAGE.h - 1.4} fontSize="0.3" fill="#555">
+        </SvgText>
+        <SvgText x={1.6} y={PAGE.h - 1.4} size={0.3} fill="#555">
           p. {pageNo}/{total} · 1:1 · overlap 1 cm: trim the shaded strip, glue it under the neighbour
-        </text>
+        </SvgText>
       </g>
     </Sheet>
   );
@@ -103,9 +103,9 @@ function Legend({ x, y }: { x: number; y: number }) {
         return (
           <g key={k} transform={`translate(0 ${i * 0.75})`}>
             <line x1={0} y1={0} x2={2} y2={0} stroke={s.stroke} strokeWidth={s.width * 1.5} strokeDasharray={s.dash} />
-            <text x={2.4} y={0.15} fontSize="0.38" fill="#111">
+            <SvgText x={2.4} y={0.15} size={0.38} fill="#111">
               {label}
-            </text>
+            </SvgText>
           </g>
         );
       })}
@@ -134,15 +134,15 @@ function CoverPage({
   return (
     <Sheet label={`${character.toUpperCase()} templates cover page with a 10 centimetre calibration square and page index`}>
       <g fontFamily={FONT} fill="#111">
-        <text x={1.5} y={2.4} fontSize="1.1" fontWeight="bold">
+        <SvgText x={1.5} y={2.4} size={1.1} fontWeight="bold">
           {character.toUpperCase()} · 1:1 templates
-        </text>
-        <text x={1.5} y={3.3} fontSize="0.42">
+        </SvgText>
+        <SvgText x={1.5} y={3.3} size={0.42}>
           A4 portrait · print at 100% (“Actual size”), no scaling, no “Fit to page”.
-        </text>
-        <text x={1.5} y={3.9} fontSize="0.42">
+        </SvgText>
+        <SvgText x={1.5} y={3.9} size={0.42}>
           Check your printer scale: the square must measure exactly 10 cm (3.94 in) on each side.
-        </text>
+        </SvgText>
       </g>
       <g transform="translate(1.5 4.8)">
         <rect x={0} y={0} width={sq} height={sq} fill="none" stroke="#000" strokeWidth="0.04" />
@@ -152,35 +152,35 @@ function CoverPage({
             <line x1={0} y1={i} x2={i % 5 === 0 ? 0.8 : 0.4} y2={i} stroke="#000" strokeWidth="0.02" />
           </g>
         ))}
-        <text x={sq / 2} y={sq / 2} fontSize="0.6" textAnchor="middle" fontFamily={FONT} fill="#111">
+        <SvgText x={sq / 2} y={sq / 2} size={0.6} textAnchor="middle" fill="#111">
           10 cm × 10 cm
-        </text>
-        <text x={sq / 2} y={sq / 2 + 0.8} fontSize="0.38" textAnchor="middle" fontFamily={FONT} fill="#555">
+        </SvgText>
+        <SvgText x={sq / 2} y={sq / 2 + 0.8} size={0.38} textAnchor="middle" fill="#555">
           calibration square
-        </text>
+        </SvgText>
       </g>
       <Legend x={12.6} y={5.4} />
       <g fontFamily={FONT} fill="#111" transform="translate(1.5 16.6)">
-        <text x={0} y={0} fontSize="0.55" fontWeight="bold">
+        <SvgText x={0} y={0} size={0.55} fontWeight="bold">
           Pieces and pages
-        </text>
+        </SvgText>
         {pieces.map((p, i) => (
           <g key={p.id} transform={`translate(0 ${0.95 + i * 1.25})`}>
-            <text x={0} y={0} fontSize="0.4" fontWeight="bold">
+            <SvgText x={0} y={0} size={0.4} fontWeight="bold">
               {p.name}
-            </text>
-            <text x={0} y={0.5} fontSize="0.3" fill="#444">
+            </SvgText>
+            <SvgText x={0} y={0.5} size={0.3} fill="#444">
               p. {firstPage[i]}–{firstPage[i] + pageTiles[i].length - 1} · {pageTiles[i].map((t) => t.label).join(" ")} · grid {tilings[i].rows}×{tilings[i].cols}, A1
               top-left ·{" "}
               {fmtLen(p.bbox.maxX - p.bbox.minX, unit, 0)} × {fmtLen(p.bbox.maxY - p.bbox.minY, unit, 0)}
               {tilings[i].rotate ? " · rotated 90°" : ""}
-            </text>
+            </SvgText>
           </g>
         ))}
       </g>
-      <text x={1.5} y={PAGE.h - 1.4} fontSize="0.3" fontFamily={FONT} fill="#555">
+      <SvgText x={1.5} y={PAGE.h - 1.4} size={0.3} fill="#555">
         p. 1/{total} · {site.disclaimer}
-      </text>
+      </SvgText>
     </Sheet>
   );
 }

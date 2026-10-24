@@ -18,9 +18,11 @@ import { DryingTimers } from "./Timers";
 import { Countdown } from "./Countdown";
 import { ViewerTab } from "./ViewerTab";
 import { TemplatesTab } from "./TemplatesTab";
-import { StepMode } from "./StepMode";
+import dynamic from "next/dynamic";
 import { FitLab } from "./FitLab";
 import { Portal } from "./Portal";
+
+const StepMode = dynamic(() => import("./StepMode").then((m) => m.StepMode), { ssr: false });
 
 const config = {
   uvi: {
@@ -285,7 +287,7 @@ function HubInner({ character }: { character: CharacterId }) {
           <ul className="grid gap-3 sm:grid-cols-2">
             {c.safety.map((s, i) => (
               <li key={s} className="flex gap-3 border border-blood-bright/30 bg-blood/10 p-4 text-bandage">
-                <span className="font-heading text-blood-bright" aria-hidden="true">
+                <span className="font-heading text-blood-text" aria-hidden="true">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <RT text={s} />
@@ -333,7 +335,7 @@ function HubInner({ character }: { character: CharacterId }) {
           Worn by {c.meta.wearer} · {c.meta.build}
         </p>
         <h1 className="glitch mt-2 font-heading text-6xl text-bandage sm:text-8xl">{c.meta.name}</h1>
-        <p className="flicker mt-3 font-heading text-2xl text-blood-bright">{c.meta.tagline}</p>
+        <p className="flicker mt-3 font-heading text-2xl text-blood-text">{c.meta.tagline}</p>
       </header>
       <Tabs tabs={tabs} label={`${c.meta.name} build sections`} />
       {stepMode && (

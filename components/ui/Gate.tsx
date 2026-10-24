@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useStore } from "@/lib/store";
 
 /**
@@ -8,9 +9,23 @@ import { useStore } from "@/lib/store";
  */
 export function Gate() {
   const enter = useStore((s) => s.enter);
+
+  // While the gate is open, the page behind it is inert (no focus, no clicks, hidden from screen readers).
+  useEffect(() => {
+    const html = document.documentElement;
+    const sync = () => {
+      const open = html.dataset.gate === "open";
+      document.querySelectorAll("body > header, #main, body > footer").forEach((el) => el.toggleAttribute("inert", open));
+    };
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(html, { attributes: true, attributeFilter: ["data-gate"] });
+    return () => mo.disconnect();
+  }, []);
+
   return (
     <div
-      className="gate fixed inset-0 z-[80] items-center justify-center bg-ash/95 p-6 backdrop-blur-sm"
+      className="gate fixed inset-0 z-[80] items-center justify-center bg-ash/95 p-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="gate-title"

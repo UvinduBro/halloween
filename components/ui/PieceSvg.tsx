@@ -14,6 +14,40 @@ export const PATH_STYLE: Record<PathKind, { stroke: string; width: number; dash?
   guide: { stroke: "#7a7a7a", width: 0.03, dash: "0.2 0.2" },
 };
 
+/**
+ * SVG text sized in centimetres. Drawn in a ×100 space under scale(0.01) so the computed font size is
+ * legible to audits (and to svg2pdf) while rendering exactly the same.
+ */
+export function SvgText({
+  x,
+  y,
+  size,
+  rotate,
+  children,
+  ...rest
+}: {
+  x: number;
+  y: number;
+  size: number;
+  rotate?: number;
+  children: React.ReactNode;
+} & Omit<React.SVGProps<SVGTextElement>, "x" | "y" | "fontSize" | "rotate">) {
+  const X = x * 100;
+  const Y = y * 100;
+  return (
+    <text
+      x={X}
+      y={Y}
+      fontSize={size * 100}
+      transform={`scale(0.01)${rotate ? ` rotate(${rotate} ${X} ${Y})` : ""}`}
+      fontFamily="Helvetica, Arial, sans-serif"
+      {...rest}
+    >
+      {children}
+    </text>
+  );
+}
+
 export function PieceGroup({ piece, unit, rotate = false, labelScale = 0.55 }: { piece: TemplatePiece; unit: Unit; rotate?: boolean; labelScale?: number }) {
   return (
     <g transform={rotate ? "rotate(90)" : undefined}>
@@ -35,19 +69,18 @@ export function PieceGroup({ piece, unit, rotate = false, labelScale = 0.55 }: {
       {piece.labels.map((l, i) => {
         const text = l.lengthCm !== undefined ? fmtLen(l.lengthCm, unit) : l.text;
         return (
-          <text
+          <SvgText
             key={i}
             x={l.x}
             y={l.y}
-            fontSize={(l.size ?? 1) * labelScale}
-            fontFamily="Helvetica, Arial, sans-serif"
+            size={(l.size ?? 1) * labelScale}
+            rotate={l.rotate}
             textAnchor={l.anchor ?? "middle"}
             dominantBaseline="middle"
             fill={l.lengthCm !== undefined ? "#a3361f" : "#111"}
-            transform={l.rotate ? `rotate(${l.rotate} ${l.x} ${l.y})` : undefined}
           >
             {text}
-          </text>
+          </SvgText>
         );
       })}
     </g>
