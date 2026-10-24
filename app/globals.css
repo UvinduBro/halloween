@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ash: #0e0d0c;
+  --color-ash-2: #171513;
+  --color-ash-3: #221f1c;
+  --color-fog: #c9c4ba;
+  --color-fog-dim: #a29c91;
+  --color-rust: #8b4a23;
+  --color-rust-bright: #c06a35;
+  --color-blood: #5a0f0f;
+  --color-blood-bright: #a33a32;
+  --color-bandage: #e9e1d0;
+  --color-sick: #9fa87a;
+
+  --font-heading: var(--font-special-elite), "Courier New", monospace;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --mx: 50%;
+  --my: 40%;
+}
+
+html {
+  background: var(--color-ash);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ash);
+  color: var(--color-fog);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-blood);
+  color: var(--color-bandage);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sick);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3,
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Atmosphere overlays ---------- */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain 0.9s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -4%); }
+  60% { transform: translate(-4%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 59;
+  background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.fog-layer {
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background:
+    radial-gradient(40% 25% at 20% 70%, rgba(201, 196, 186, 0.12), transparent 70%),
+    radial-gradient(35% 20% at 75% 60%, rgba(201, 196, 186, 0.1), transparent 70%),
+    radial-gradient(50% 30% at 50% 95%, rgba(201, 196, 186, 0.14), transparent 70%);
+  filter: blur(20px);
+  animation: fog-drift 60s ease-in-out infinite alternate;
+}
+
+.fog-layer.b {
+  opacity: 0.25;
+  animation-duration: 85s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes fog-drift {
+  from { transform: translate3d(-6%, 0, 0); }
+  to { transform: translate3d(6%, -2%, 0); }
+}
+
+.flicker {
+  animation: flicker 9s linear infinite;
+}
+
+@keyframes flicker {
+  0%, 91%, 100% { opacity: 1; }
+  92% { opacity: 0.35; }
+  92.6% { opacity: 1; }
+  93.4% { opacity: 0.55; }
+  94% { opacity: 1; }
+  97% { opacity: 0.8; }
+  97.3% { opacity: 1; }
+}
+
+.glitch {
+  position: relative;
+  animation: glitch-in 0.9s steps(2) 1 both;
+}
+
+@keyframes glitch-in {
+  0% { opacity: 0; transform: translate(0, 0); text-shadow: none; clip-path: inset(40% 0 50% 0); }
+  10% { opacity: 1; transform: translate(-6px, 2px); text-shadow: 3px 0 var(--color-blood-bright), -3px 0 var(--color-sick); clip-path: inset(10% 0 70% 0); }
+  25% { transform: translate(5px, -1px); clip-path: inset(60% 0 5% 0); }
+  40% { transform: translate(-2px, 0); clip-path: inset(0 0 0 0); text-shadow: -2px 0 var(--color-blood-bright), 2px 0 var(--color-sick); }
+  60% { transform: translate(3px, 1px); clip-path: inset(30% 0 30% 0); }
+  80% { transform: translate(0, 0); clip-path: inset(0 0 0 0); text-shadow: 1px 0 var(--color-blood); }
+  100% { opacity: 1; transform: none; text-shadow: none; clip-path: none; }
+}
+
+.fade-up {
+  animation: fade-up 1.6s ease-out both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Static cut transition */
+.static-cut {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background-color: #0e0d0c;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='1'/><feColorMatrix values='0 0 0 0 0.8  0 0 0 0 0.78  0 0 0 0 0.75  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: static-cut 260ms steps(4) 1 both;
+}
+
+@keyframes static-cut {
+  0% { opacity: 0; }
+  20% { opacity: 1; background-position: 0 0; }
+  50% { opacity: 0.9; background-position: 40px 70px; }
+  75% { opacity: 1; background-position: -60px 20px; }
+  100% { opacity: 0; }
+}
+
+.blackout {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: #000;
+  pointer-events: none;
+}
+
+/* Flashlight hero reveal */
+.hero-reveal {
+  -webkit-mask-image: radial-gradient(circle 140px at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+  mask-image: radial-gradient(circle 140px at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+}
+
+/* Rusted name tag */
+.rust-tag {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(192, 106, 53, 0.55), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(90, 15, 15, 0.6), transparent 45%),
+    linear-gradient(160deg, #4a3a30, #2a211c 60%, #3a2a20);
+  border: 1px solid rgba(139, 74, 35, 0.8);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8), 0 4px 14px rgba(0, 0, 0, 0.6);
+  color: var(--color-bandage);
+  text-shadow: 0 1px 0 #000;
+}
+
+.rust-tag.glitching {
+  animation: glitch-in 0.5s steps(2) 1 both;
+}
+
+/* Grainy photo frame */
+.grainy-frame {
+  position: relative;
+  border: 10px solid #1a1714;
+  box-shadow: 0 0 0 1px rgba(139, 74, 35, 0.6), 0 10px 30px rgba(0, 0, 0, 0.7);
+  background: #000;
+}
+
+.grainy-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+  animation: frame-flicker 5s linear infinite;
+}
+
+@keyframes frame-flicker {
+  0%, 88%, 100% { opacity: 0.55; }
+  89% { opacity: 0.95; }
+  90% { opacity: 0.4; }
+  94% { opacity: 0.8; }
+}
+
+/* ---------- Calm mode and reduced motion ---------- */
+
+html[data-calm="1"] .grain,
+html[data-calm="1"] .fog-layer,
+html[data-calm="1"] .flicker,
+html[data-calm="1"] .glitch,
+html[data-calm="1"] .rust-tag.glitching,
+html[data-calm="1"] .grainy-frame::after {
+  animation: none !important;
+}
+
+html[data-calm="1"] .glitch {
+  text-shadow: none;
+  clip-path: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .fog-layer,
+  .flicker,
+  .glitch,
+  .fade-up,
+  .rust-tag.glitching,
+  .grainy-frame::after {
+    animation: none !important;
+  }
+  .static-cut {
+    display: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Content gate (shown before hydration, hidden by inline script) ---------- */
+
+.gate {
+  display: none;
+}
+
+html[data-gate="open"] .gate {
+  display: flex;
+}
+
+/* ---------- Utility ---------- */
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.prose-horror p + p {
+  margin-top: 0.75rem;
+}
+
+/* ---------- Print ---------- */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+.print-sheet {
+  width: 210mm;
+  height: 297mm;
+  overflow: hidden;
+  background: #fff;
+  color: #000;
+  position: relative;
+  break-after: page;
+  page-break-after: always;
+}
+
+.print-sheet:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print,
+  .grain,
+  .vignette,
+  .fog-layer,
+  .static-cut {
+    display: none !important;
+  }
+  .print-area {
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+  .print-sheet {
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+}
