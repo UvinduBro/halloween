@@ -13,6 +13,7 @@ import { useIsMobile, useMotionAllowed } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { useCutNavigate } from "@/lib/transition";
 import { Countdown } from "./Countdown";
+import { Portal } from "./Portal";
 
 function HeroSkeleton() {
   return (
@@ -307,7 +308,11 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
         </div>
       </section>
 
-      {blackout && <div className="blackout" aria-hidden="true" />}
+      {blackout && (
+        <Portal>
+          <div className="blackout" aria-hidden="true" />
+        </Portal>
+      )}
     </>
   );
 }

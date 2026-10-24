@@ -245,7 +245,7 @@ export default function BuildViewer({
               minDistance={focus.radius * 1.3}
               maxDistance={focus.radius * 10}
               target={focus.target}
-              autoRotate={compact && motion}
+              autoRotate={compact && motion && !linkGroup}
               autoRotateSpeed={0.8}
               touches={mobile ? { ONE: -1 as unknown as THREE.TOUCH, TWO: THREE.TOUCH.DOLLY_ROTATE } : undefined}
             />

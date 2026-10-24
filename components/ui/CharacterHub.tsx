@@ -20,6 +20,7 @@ import { ViewerTab } from "./ViewerTab";
 import { TemplatesTab } from "./TemplatesTab";
 import { StepMode } from "./StepMode";
 import { FitLab } from "./FitLab";
+import { Portal } from "./Portal";
 
 const config = {
   uvi: {
@@ -336,13 +337,15 @@ function HubInner({ character }: { character: CharacterId }) {
       </header>
       <Tabs tabs={tabs} label={`${c.meta.name} build sections`} />
       {stepMode && (
-        <StepMode
-          character={character}
-          group={stepMode.group}
-          start={stepMode.index}
-          timers={c.timers}
-          onClose={() => setStepMode(null)}
-        />
+        <Portal>
+          <StepMode
+            character={character}
+            group={stepMode.group}
+            start={stepMode.index}
+            timers={c.timers}
+            onClose={() => setStepMode(null)}
+          />
+        </Portal>
       )}
     </div>
   );
