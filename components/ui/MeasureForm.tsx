@@ -34,7 +34,7 @@ function Field<K extends string>({
   };
 
   return (
-    <div className="flex gap-3 border border-fog/10 bg-ash-2/80 p-3">
+    <div className="flex gap-3 panel p-3">
       <MeasureFigure kind={field.figure} label={field.label} />
       <div className="min-w-0 flex-1">
         <label htmlFor={id} className="font-heading text-lg text-bandage">
@@ -55,7 +55,7 @@ function Field<K extends string>({
             onKeyDown={(e) => {
               if (e.key === "Enter") commit((e.target as HTMLInputElement).value);
             }}
-            className="min-h-11 w-24 border border-fog/20 bg-ash px-2 text-bandage"
+            className="min-h-11 w-24 rounded-lg border border-fog/20 bg-ash px-2 text-bandage"
           />
           <span className="text-sm text-fog-dim">{unit}</span>
           <input
@@ -109,7 +109,7 @@ export function Profiles({ character }: { character: CharacterId }) {
   const id = useId();
 
   return (
-    <div className="border border-fog/10 bg-ash-2/80 p-4">
+    <div className="panel p-4">
       <h3 className="font-heading text-xl text-bandage">Profiles</h3>
       <p className="mt-1 text-sm text-fog-dim">Saved in this browser. Loading a profile updates the 3D, templates and every number on the page.</p>
       <div className="mt-3 flex flex-wrap items-end gap-2">
@@ -117,7 +117,7 @@ export function Profiles({ character }: { character: CharacterId }) {
           <label htmlFor={id} className="block text-xs uppercase tracking-widest text-fog-dim">
             Profile name
           </label>
-          <input id={id} value={name} onChange={(e) => setName(e.target.value)} className="min-h-11 border border-fog/20 bg-ash px-2 text-bandage" />
+          <input id={id} value={name} onChange={(e) => setName(e.target.value)} className="min-h-11 rounded-lg border border-fog/20 bg-ash px-2 text-bandage" />
         </div>
         <button type="button" onClick={() => save(character, name.trim() || defaultName)} className="min-h-11 bg-blood px-4 text-bandage hover:bg-blood-bright">
           Save profile

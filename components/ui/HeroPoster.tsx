@@ -30,10 +30,10 @@ export function HeroPoster({ assets, mobile }: { assets: Record<CharacterId, Her
       if (!ctx) return;
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, w, h);
-      const spread = mobile ? 0.26 : 0.2;
+      const spread = mobile ? 0.26 : 0.085;
       (["uvi", "ruvi"] as CharacterId[]).forEach((id, i) => {
         const cx = w * (0.5 + (i ? spread : -spread));
-        const figH = h * 0.8;
+        const figH = h * (mobile ? 0.8 : 0.78);
         const base = h * 0.9;
         // back glow
         const g = ctx.createRadialGradient(cx, base - figH * 0.55, 0, cx, base - figH * 0.55, figH * 0.55);

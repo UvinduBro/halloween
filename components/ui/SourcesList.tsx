@@ -4,7 +4,7 @@ export function SourcesList({ sources }: { sources: SourceLink[] }) {
   return (
     <ul className="space-y-3">
       {sources.map((s) => (
-        <li key={s.url} className="border border-fog/10 bg-ash-2/80 p-4">
+        <li key={s.url} className="panel p-4">
           <a href={s.url} target="_blank" rel="noopener noreferrer" className="font-heading text-lg text-bandage underline decoration-rust-bright underline-offset-4 hover:text-sick">
             {s.title}
             <span className="sr-only"> (opens in a new tab)</span>

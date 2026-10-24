@@ -163,7 +163,7 @@ export function PhotoBooth() {
           </button>
         ) : (
           <>
-            <button type="button" onClick={capture} className="min-h-11 bg-blood px-5 font-heading text-lg text-bandage hover:bg-blood-bright">
+            <button type="button" onClick={capture} className="rounded-full min-h-11 bg-blood px-5 font-heading text-lg text-bandage hover:bg-blood-bright">
               Take photo
             </button>
             <button
@@ -177,7 +177,7 @@ export function PhotoBooth() {
             >
               Switch camera
             </button>
-            <button type="button" onClick={stop} className="min-h-11 px-4 text-fog-dim underline">
+            <button type="button" onClick={stop} className="rounded-full min-h-11 px-4 text-fog-dim underline">
               Stop
             </button>
           </>
@@ -188,7 +188,7 @@ export function PhotoBooth() {
         <input id={uploadId} type="file" accept="image/*" className="sr-only" onChange={(e) => fromFile(e.target.files?.[0])} />
         {shot && (
           <>
-            <a href={shot} download="scare-test.jpg" className="inline-flex min-h-11 items-center border border-sick/50 px-4 text-sick hover:bg-sick/10">
+            <a href={shot} download="scare-test.jpg" className="inline-flex rounded-full min-h-11 items-center border border-sick/50 px-4 text-sick hover:bg-sick/10">
               Download
             </a>
             <button type="button" onClick={() => void save()} className="min-h-11 border border-sick/50 px-4 text-sick hover:bg-sick/10">

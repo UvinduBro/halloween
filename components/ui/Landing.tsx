@@ -16,6 +16,12 @@ import { useInteracted } from "@/lib/interaction";
 import { Countdown } from "./Countdown";
 import { HeroPoster } from "./HeroPoster";
 import { Portal } from "./Portal";
+import { DeferredPosterArt as PosterArt } from "./DeferredPosterArt";
+import { SectionHeading } from "./Section";
+import { EpisodeCards } from "./landing/EpisodeCards";
+import { TonightRail } from "./landing/TonightRail";
+import { Dossier } from "./landing/Dossier";
+import type { PosterArt as Art } from "@/lib/assets";
 
 const HeroScene = dynamic(() => import("@/components/3d/hero/HeroScene"), { ssr: false, loading: () => null });
 
@@ -91,7 +97,13 @@ function useTiltPermission(mobile: boolean) {
   return { needs, request };
 }
 
-export function Landing({ assets: detected }: { assets: Record<CharacterId, HeroAsset> }) {
+export function Landing({
+  assets: detected,
+  posters,
+}: {
+  assets: Record<CharacterId, HeroAsset>;
+  posters: Record<CharacterId, Art | null>;
+}) {
   const motion = useMotionAllowed();
   const mobile = useIsMobile();
   const flashlight = useStore((s) => s.heroFlashlight);
@@ -196,115 +208,162 @@ export function Landing({ assets: detected }: { assets: Record<CharacterId, Hero
 
   const meta = { uvi: uviMeta, ruvi: ruviMeta };
 
+  const plateButtons = (["uvi", "ruvi"] as CharacterId[]).map((id) => (
+    <div
+      key={id}
+      ref={(el) => {
+        plates.current[id] = el;
+      }}
+      className="absolute z-20 flex flex-col items-center"
+      style={{ left: `${id === "uvi" ? (mobile ? 24 : 43) : mobile ? 76 : 57}%`, bottom: "4%", transform: "translateX(-50%)" }}
+    >
+      <button
+        type="button"
+        onPointerEnter={() => setHover(id, true)}
+        onPointerLeave={() => setHover(id, false)}
+        onFocus={() => setHover(id, true)}
+        onBlur={() => setHover(id, false)}
+        onClick={() => onSelect(id)}
+        aria-label={`Enter ${meta[id].wearer}'s build: ${meta[id].build}`}
+        className={`rust-tag min-h-11 min-w-24 rounded-md px-5 py-2 font-heading text-2xl tracking-[0.2em] ${hovered[id] && motion ? "glitching" : ""} ${hovered[id] ? "flicker" : ""} ${selected === id ? "ring-2 ring-blood-bright" : ""}`}
+      >
+        {heroFigures[id].name}
+      </button>
+      {heroFigures[id].credit && <span className="mt-1 text-[10px] text-fog-dim">{heroFigures[id].credit}</span>}
+    </div>
+  ));
+
   return (
     <>
-      <section ref={heroRef} className="relative overflow-hidden" aria-labelledby="hero-title">
-        {!flashlight && (
-          <div className="hero-reveal pointer-events-none absolute inset-0 z-0 hidden sm:block" aria-hidden="true">
-            <Scratches />
-          </div>
-        )}
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pt-10 text-center sm:pt-14">
-          <p className="font-heading text-xs uppercase tracking-[0.45em] text-sick">Halloween · 31.10.2026 · Colombo</p>
-          <h1 id="hero-title" className={`mt-3 font-heading text-6xl leading-none text-bandage sm:text-8xl md:text-9xl ${motion ? "glitch" : ""}`}>
-            UVI <span className="text-blood-text">&amp;</span> RUVI
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-fog">Two Halloween builds, measured to the centimetre. Choose who you follow into the fog.</p>
-          <div className="mt-6">
-            <Countdown />
-          </div>
-        </div>
-
-        <div ref={stageRef} className="relative z-10 mx-auto mt-4 h-[64svh] min-h-[420px] w-full max-w-6xl sm:h-[70vh]">
-          {!ready3D && <HeroPoster assets={assets} mobile={mobile} />}
-          {show3D && (
-            <div className={`absolute inset-0 transition-opacity duration-700 ${ready3D ? "opacity-100" : "opacity-0"}`}>
-              <HeroScene
-                assets={assets}
-                motion={motion}
-                mobile={mobile}
-                flashlight={flashlight}
-                onSelect={onSelect}
-                plates={plates}
-                onReady={() => setReady3D(true)}
-              />
+      <section ref={heroRef} className="relative mx-auto max-w-[1400px] px-3 pt-4 sm:px-5" aria-labelledby="hero-title">
+        {/* The "screen": a rounded cinematic frame, as on a streaming landing page */}
+        <div className="relative overflow-hidden rounded-[2rem] border border-fog/15 bg-ash shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)] lg:h-[min(88svh,860px)] lg:min-h-[640px]">
+          {!flashlight && (
+            <div className="hero-reveal pointer-events-none absolute inset-0 z-0 hidden sm:block" aria-hidden="true">
+              <Scratches />
             </div>
           )}
-          {/* Rusted name plates: real buttons, positioned under each figure by the scene */}
-          {(["uvi", "ruvi"] as CharacterId[]).map((id) => (
-            <div
-              key={id}
-              ref={(el) => {
-                plates.current[id] = el;
-              }}
-              className="absolute flex flex-col items-center"
-              style={{ left: `${id === "uvi" ? (mobile ? 24 : 30) : mobile ? 76 : 70}%`, bottom: "3%", transform: "translateX(-50%)" }}
-            >
+
+          {/* Left column: title, logline, actions */}
+          <div className="relative z-20 px-6 pt-8 sm:px-10 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[36%] lg:flex-col lg:justify-center lg:bg-gradient-to-r lg:from-ash lg:via-ash/80 lg:to-transparent lg:pt-0">
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-sick">A Halloween special · 2 episodes</p>
+            <h1 id="hero-title" className={`font-display mt-3 text-[clamp(4.5rem,13vw,9.5rem)] text-bandage ${motion ? "glitch" : ""}`}>
+              Uvi
+              <span className="block text-[0.42em] leading-none text-blood-text">&amp;</span>
+              <span className="title-outline block" style={{ ["--accent" as string]: "#e9e1d0" }}>
+                Ruvi
+              </span>
+            </h1>
+            <p className="mt-5 max-w-sm text-fog">
+              Two monsters, measured to the centimetre and built from cardboard, plaster and nerve in eight nights. Choose who you follow into the fog.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/progress" className="btn-play" style={{ ["--accent" as string]: "#e0685d" }}>
+                <span aria-hidden="true">▶</span> Start building
+              </Link>
+              <a href="#episodes" className="btn-ghost">
+                Episodes
+              </a>
+            </div>
+          </div>
+
+          {/* Stage: the 3D figures in the fog (absolute behind the columns on desktop) */}
+          <div ref={stageRef} className="relative z-10 h-[62svh] min-h-[440px] w-full lg:absolute lg:inset-0 lg:h-auto">
+            {!ready3D && <HeroPoster assets={assets} mobile={mobile} />}
+            {show3D && (
+              <div className={`absolute inset-0 transition-opacity duration-700 ${ready3D ? "opacity-100" : "opacity-0"}`}>
+                <HeroScene
+                  assets={assets}
+                  motion={motion}
+                  mobile={mobile}
+                  flashlight={flashlight}
+                  onSelect={onSelect}
+                  plates={plates}
+                  onReady={() => setReady3D(true)}
+                />
+              </div>
+            )}
+            {plateButtons}
+            <p className="pointer-events-none absolute bottom-1 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap text-[11px] text-fog-dim">
+              {mobile ? "Tap a figure · swipe it to turn" : "Hover to wake them · drag to turn · click to follow"}
+            </p>
+          </div>
+
+          {/* Right column: tonight panel */}
+          <div className="relative z-20 px-4 pb-6 lg:absolute lg:inset-y-0 lg:right-0 lg:flex lg:w-[30%] lg:flex-col lg:justify-center lg:bg-gradient-to-l lg:from-ash lg:via-ash/70 lg:to-transparent lg:px-8 lg:pb-0">
+            <div className="flex justify-end gap-2 lg:absolute lg:right-6 lg:top-6">
               <button
                 type="button"
-                onPointerEnter={() => setHover(id, true)}
-                onPointerLeave={() => setHover(id, false)}
-                onFocus={() => setHover(id, true)}
-                onBlur={() => setHover(id, false)}
-                onClick={() => onSelect(id)}
-                aria-label={`Enter ${meta[id].wearer}'s build: ${meta[id].build}`}
-                className={`rust-tag min-h-11 min-w-24 px-5 py-2 font-heading text-2xl tracking-[0.2em] ${hovered[id] && motion ? "glitching" : ""} ${hovered[id] ? "flicker" : ""} ${selected === id ? "ring-2 ring-blood-bright" : ""}`}
+                aria-pressed={flashlight}
+                onClick={() => {
+                  setMount3D(true);
+                  setFlashlight(!flashlight);
+                }}
+                className={`min-h-11 rounded-full border px-4 text-xs uppercase tracking-widest ${flashlight ? "border-bandage bg-bandage/10 text-bandage" : "border-fog/30 bg-ash/70 text-fog"}`}
               >
-                {heroFigures[id].name}
+                {flashlight ? "Lights on" : "Flashlight"}
               </button>
-              {heroFigures[id].credit && <span className="mt-1 text-[10px] text-fog-dim">{heroFigures[id].credit}</span>}
+              {tilt.needs && (
+                <button type="button" onClick={tilt.request} className="min-h-11 rounded-full border border-fog/30 bg-ash/70 px-4 text-xs uppercase tracking-widest text-fog">
+                  Enable tilt
+                </button>
+              )}
             </div>
-          ))}
-          <div className="absolute right-3 top-3 z-20 flex flex-col items-end gap-2">
-            <button
-              type="button"
-              aria-pressed={flashlight}
-              onClick={() => {
-                setMount3D(true);
-                setFlashlight(!flashlight);
-              }}
-              className={`min-h-11 border px-3 text-xs uppercase tracking-widest backdrop-blur ${flashlight ? "border-bandage bg-bandage/10 text-bandage" : "border-fog/30 bg-ash/60 text-fog"}`}
-            >
-              {flashlight ? "Lights on" : "Flashlight"}
-            </button>
-            {tilt.needs && (
-              <button type="button" onClick={tilt.request} className="min-h-11 border border-fog/30 bg-ash/60 px-3 text-xs uppercase tracking-widest text-fog">
-                Enable tilt
-              </button>
-            )}
+            <div className="panel mt-4 p-5 lg:mt-0">
+              <p className="font-heading text-lg uppercase tracking-[0.12em] text-blood-text">They come out 31.10</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="chip">2026</span>
+                <span className="chip chip-accent" style={{ ["--accent" as string]: "#e0685d" }}>
+                  16+
+                </span>
+                <span className="chip">8 nights</span>
+                <span className="chip">Colombo · 19:00</span>
+              </div>
+              <div className="mt-4">
+                <Countdown compact />
+              </div>
+              <p className="mt-5 text-xs uppercase tracking-[0.3em] text-fog-dim">What&apos;s next?</p>
+              <div className="mt-2 grid grid-cols-2 gap-3">
+                {(["uvi", "ruvi"] as CharacterId[]).map((id) => (
+                  <Link
+                    key={id}
+                    href={`/${id}`}
+                    className="group relative h-28 overflow-hidden rounded-xl border border-fog/15 bg-ash-3"
+                    style={{ ["--accent" as string]: meta[id].accent }}
+                  >
+                    <PosterArt
+                      art={posters[id]}
+                      alt=""
+                      frameVw={[30, 6]}
+                      className="absolute left-1/2 top-0 h-[190%] -translate-x-1/2 transition duration-500 group-hover:scale-105"
+                    />
+                    <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ash to-transparent px-2 pb-1.5 pt-6 text-left">
+                      <span className="block text-[10px] uppercase tracking-widest" style={{ color: meta[id].accent }}>
+                        Ep {meta[id].episode.number}
+                      </span>
+                      <span className="font-display block text-xl text-bandage">{meta[id].name}</span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap text-[11px] text-fog-dim">
-            {mobile ? "Tap a figure · swipe it to turn" : "Hover to wake them · drag to turn · click to follow"}
-          </p>
         </div>
         {calm && <p className="sr-only">Calm mode is on: effects are reduced.</p>}
       </section>
 
-      <section className="relative z-10 mx-auto max-w-6xl px-4 py-16" aria-label="Choose a build">
-        <div className="grid gap-5 md:grid-cols-2">
-          {(["uvi", "ruvi"] as CharacterId[]).map((id, i) => (
-            <Link
-              key={id}
-              href={`/${id}`}
-              className="group fade-up block border border-fog/15 bg-ash-2/80 p-6 transition hover:border-blood-bright focus-visible:border-blood-bright"
-              style={{ animationDelay: `${0.9 + i * 0.35}s` }}
-            >
-              <p className="font-heading text-xs uppercase tracking-[0.35em] text-sick">Worn by {meta[id].wearer}</p>
-              <h2 className="mt-2 font-heading text-5xl text-bandage group-hover:text-blood-text">{meta[id].name}</h2>
-              <p className="mt-1 font-heading text-lg text-fog">{meta[id].build}</p>
-              <p className="mt-4 text-fog-dim">{meta[id].tagline}.</p>
-              <span className="mt-6 inline-flex min-h-11 items-center text-sm uppercase tracking-widest text-bandage">Open the build →</span>
-            </Link>
-          ))}
-        </div>
-        <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "1.7s" }}>
-          <Link href="/progress" className="inline-flex min-h-12 items-center bg-blood px-8 font-heading text-xl text-bandage transition hover:bg-blood-bright">
-            Start building
-          </Link>
-          <Link href="/duo" className="inline-flex min-h-12 items-center border border-fog/30 px-6 text-fog hover:text-bandage">
-            Duo mode
-          </Link>
-        </div>
+      <section id="episodes" className="relative z-10 mx-auto max-w-[1400px] scroll-mt-20 px-4 py-16 sm:px-6" aria-labelledby="episodes-title">
+        <SectionHeading kicker="Now building" title="Choose your episode" id="episodes-title" />
+        <EpisodeCards posters={posters} />
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-[1400px] px-4 pb-16 sm:px-6" aria-labelledby="next-title">
+        <SectionHeading kicker="Do not fall behind" title="What's next" id="next-title" />
+        <TonightRail />
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-[1400px] px-4 pb-8 sm:px-6">
+        <Dossier posters={posters} />
       </section>
 
       {blackout && (

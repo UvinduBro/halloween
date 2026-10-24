@@ -22,7 +22,7 @@ export function ScheduleList({ who }: { who: "uvi" | "ruvi" }) {
         const tasks = day[who];
         const isToday = today === day.date;
         return (
-          <li key={day.id} className={`border p-4 ${isToday ? "border-blood-bright bg-blood/15" : "border-fog/10 bg-ash-2/80"}`}>
+          <li key={day.id} className={`panel p-4 ${isToday ? "ring-1 ring-blood-bright" : ""}`}>
             <h3 className="font-heading text-lg text-bandage">
               {day.label} {isToday && <span className="ml-2 text-xs uppercase tracking-widest text-blood-text">today</span>}
             </h3>

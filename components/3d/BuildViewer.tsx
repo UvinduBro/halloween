@@ -105,7 +105,7 @@ function useFocus(view: ViewKind): Focus {
   }, [view, uvi.k, mask, L]);
 }
 
-const btn = "min-h-11 px-3 text-sm border transition";
+const btn = "min-h-11 rounded-full px-3 text-sm border transition";
 const on = "border-sick bg-sick/15 text-bandage";
 const off = "border-fog/20 text-fog-dim hover:text-bandage";
 
@@ -224,7 +224,7 @@ export default function BuildViewer({
           </div>
         )}
         <div
-          className={`relative w-full overflow-hidden border border-fog/10 ${compact ? "min-h-56 flex-1" : "h-[58vh] min-h-[340px] sm:h-[520px]"}`}
+          className={`relative w-full overflow-hidden rounded-2xl border border-fog/10 ${compact ? "min-h-56 flex-1" : "h-[58vh] min-h-[340px] sm:h-[520px]"}`}
           style={{ background: dark ? "#050404" : "radial-gradient(ellipse at 50% 40%, #2a2420, #0e0d0c 75%)" }}
         >
           <Canvas
@@ -303,7 +303,7 @@ export default function BuildViewer({
               <span className="w-10 text-right tabular-nums text-fog-dim">{Math.round(explode * 100)}%</span>
             </label>
             {assembly && (
-              <div className="border border-fog/10 bg-ash-2/80 p-3">
+              <div className="panel p-3">
                 <div className="flex items-center gap-3">
                   <button
                     type="button"

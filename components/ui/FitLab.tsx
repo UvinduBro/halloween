@@ -18,7 +18,7 @@ export function FitLab({ character }: { character: CharacterId }) {
   }, [character, uvi, ruvi]);
 
   return (
-    <div className="border border-fog/10 bg-ash-2/80">
+    <div className="panel overflow-hidden">
       <div className="h-80">
         <LazyViewer
           view={character === "uvi" ? "helmet" : "fit"}

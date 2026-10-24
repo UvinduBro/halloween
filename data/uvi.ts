@@ -20,12 +20,20 @@ export const uviMeta: CharacterMeta = {
   wearer: "Uvi",
   build: "Pyramid-helmet executioner",
   tagline: "The weight you carry",
+  episode: {
+    number: "01",
+    genre: "Cardboard horror",
+    rating: "16+",
+    runtime: "≈ 30 h build",
+    logline: "Five laminated panels, a hard hat and a 150 cm blade. He doesn't run. He doesn't need to.",
+    subtitle: "The Executioner",
+  },
   overview: [
     "A towering, rust-stained pyramid helmet, a {150} cardboard great knife and a torn, dragging skirt. The helmet sits on a hard hat, so the weight rides on the head and shoulders and not on the neck.",
     "Everything is cardboard, PVA, papier-mâché and paint. No special tools. Expect about a week of evenings; the schedule below fits the build into the 8 days before Halloween.",
     "The tip ends up about {$tipHeight|0} off the ground. Doors, ceiling fans and stairs are now your enemies.",
   ],
-  accent: "#8B4A23",
+  accent: "#E8833A",
 };
 
 /* ------------------------------------------------------------------ */

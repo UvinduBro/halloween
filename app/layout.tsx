@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Special_Elite } from "next/font/google";
+import { Anton, Inter, Special_Elite } from "next/font/google";
 import "./globals.css";
 import { Atmosphere } from "@/components/ui/Atmosphere";
 import { Footer } from "@/components/ui/Footer";
@@ -16,7 +16,19 @@ const specialElite = Special_Elite({
   subsets: ["latin"],
   variable: "--font-special-elite",
   display: "swap",
+  // only used for small kickers now: don't spend the critical path on it
+  preload: false,
   fallback: ["Courier New", "Courier", "monospace"],
+});
+
+// Tall condensed display face for poster titles.
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-anton",
+  display: "swap",
+  preload: false,
+  fallback: ["Impact", "Haettenschweiler", "Arial Narrow", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -34,7 +46,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-GB" className={`${inter.variable} ${specialElite.variable}`} data-calm="0" data-gate="closed" suppressHydrationWarning>
+    <html lang="en-GB" className={`${inter.variable} ${specialElite.variable} ${anton.variable}`} data-calm="0" data-gate="closed" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: preHydrationScript }} />
       </head>

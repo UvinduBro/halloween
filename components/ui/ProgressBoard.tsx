@@ -60,7 +60,7 @@ export function ProgressBoard() {
         {(["uvi", "ruvi"] as CharacterId[]).map((who) => {
           const s = stats(who);
           return (
-            <div key={who} className="space-y-3 border border-fog/10 bg-ash-2/80 p-5">
+            <div key={who} className="space-y-3 panel p-5">
               <div className="flex items-baseline justify-between">
                 <h2 className="font-heading text-3xl text-bandage">{who.toUpperCase()}</h2>
                 <Link href={`/${who}#build`} className="text-sm text-fog-dim underline hover:text-bandage">
@@ -118,12 +118,12 @@ export function ProgressBoard() {
       <h2 className="mb-4 mt-12 font-heading text-3xl text-bandage">Shopping lists</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <VarsProvider character="uvi">
-          <div className="border border-fog/10 bg-ash-2/80 p-5">
+          <div className="panel p-5">
             <ShoppingList items={uviShopping} title="Uvi" />
           </div>
         </VarsProvider>
         <VarsProvider character="ruvi">
-          <div className="border border-fog/10 bg-ash-2/80 p-5">
+          <div className="panel p-5">
             <ShoppingList items={ruviShopping} title="Ruvi" />
           </div>
         </VarsProvider>

@@ -257,11 +257,11 @@ export function PrintSheets({ character }: { character: CharacterId }) {
             type="button"
             onClick={exportPdf}
             disabled={busy}
-            className="min-h-11 border border-fog/30 px-5 text-fog hover:text-bandage disabled:opacity-50"
+            className="rounded-full min-h-11 border border-fog/30 px-5 text-fog hover:text-bandage disabled:opacity-50"
           >
             {busy ? "Building PDF…" : "Export PDF"}
           </button>
-          <Link href={`/${character}#templates`} className="flex min-h-11 items-center px-3 text-fog-dim underline hover:text-bandage">
+          <Link href={`/${character}#templates`} className="flex rounded-full min-h-11 items-center px-3 text-fog-dim underline hover:text-bandage">
             Back to {character.toUpperCase()}
           </Link>
         </div>

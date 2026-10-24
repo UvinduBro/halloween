@@ -4,7 +4,7 @@ import { RT } from "./Vars";
 
 export function LiveNumbers({ items, title = "Live numbers" }: { items: { label: string; text: string }[]; title?: string }) {
   return (
-    <div className="border border-fog/10 bg-ash-2/80 p-4">
+    <div className="panel p-4">
       <h3 className="font-heading text-xl text-bandage">{title}</h3>
       <dl className="mt-2 divide-y divide-fog/10" aria-live="polite">
         {items.map((n) => (

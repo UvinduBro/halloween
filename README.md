@@ -24,6 +24,12 @@ Every number comes from typed data files and live measurements. The 3D models ar
 | `/duo` | Both builds side by side with linked cameras. |
 | Extras | Drying timers with notifications, shopping lists with "copy as text", synthesised ambient audio (off by default), a cm/in toggle, calm mode and support for `prefers-reduced-motion`. |
 
+## Design
+
+A "streaming special" look: each build is an **episode**, with a poster-style header (giant condensed Anton title, outlined subtitle, meta chips, ▶ Play/Resume into step mode, and a "What's next?" panel with your next two steps). Each episode has its own accent: ember `#E8833A` for UVI and formalin `#8FD3C8` for RUVI. Pitch-deck sections (brush-stroke headings, "The plan" big-number stats, "The cast" cards) sit below the landing hero. Panels are rounded "screens" with hairline gradient edges and no backdrop blur, so they stay cheap on phones.
+
+Key art comes from the character sheets: `npm run frames` (also run automatically before `dev` and `build`) slices each sheet into `public/characters/generated/*-frame-N.webp`, so pages load one pose instead of the whole sheet. Below-the-fold art loads after the page.
+
 ## Stack
 
 Next.js 16 (App Router, Turbopack, Cache Components), TypeScript (strict), Tailwind CSS 4, three.js with `@react-three/fiber`, `@react-three/drei` and `@react-three/postprocessing`, framer-motion, zustand (persisted to localStorage), jsPDF with svg2pdf.js, and vitest.
@@ -44,6 +50,7 @@ npm run dev        # http://localhost:3000
 | `npm test` | Vitest: geometry (5.1 edge lengths, angles, unfolding, sections, window, scaling), dress pattern, mask and tiling |
 | `npm run lint` | ESLint (Next.js core-web-vitals + TypeScript) |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm run frames` | Slice character sheets into per-pose WebPs for posters |
 
 ## Deploy to Vercel
 
@@ -116,9 +123,9 @@ Measured in this container with Lighthouse 12 (simulated slow 4G, 4× CPU slowdo
 
 | Page | Performance | Accessibility | Best Practices |
 | --- | --- | --- | --- |
-| `/` | 93 | 100 | 100 |
-| `/uvi` | 90 | 100 | 100 |
-| `/ruvi` | 90 | 100 | 100 |
+| `/` | 92–93 | 100 | 100 |
+| `/uvi` | 91 | 100 | 100 |
+| `/ruvi` | 89–92 | 100 | 100 |
 | `/progress` | 93 | 100 | 100 |
 | `/uvi/print` | 94 | 100 | 100 |
 

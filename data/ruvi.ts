@@ -19,12 +19,20 @@ export const ruviMeta: CharacterMeta = {
   wearer: "Ruvi",
   build: "Swollen, bandage-headed nurse",
   tagline: "Do not look away",
+  episode: {
+    number: "02",
+    genre: "Plaster & gauze",
+    rating: "16+",
+    runtime: "≈ 24 h build",
+    logline: "A head swollen past saving, a starched dress gone sour, a pipe held low. She twitches when you blink.",
+    subtitle: "The Night Nurse",
+  },
   overview: [
     "A swollen plaster head wrapped in gauze, a stained kimono-sleeve nurse dress, a stiff cap and a lead pipe held low.",
     "The mask is moulded on a balloon, never on a face. Every number below follows Ruvi's measurements in the Measure tab: change one and the mask, the pattern and the templates all follow.",
     "The balloon is inflated to {$balloonCirc|0} round; the finished shell is {$shellW} wide, {$shellH} tall and {$shellD} deep.",
   ],
-  accent: "#9FA87A",
+  accent: "#8FD3C8",
 };
 
 /* ------------------------------------------------------------------ */

@@ -161,7 +161,7 @@ export function StepMode({
               {wake.on ? "Screen stays awake" : "Keep screen awake"}
             </button>
           )}
-          <button ref={closeRef} type="button" onClick={onClose} className="min-h-11 min-w-11 border border-fog/20 px-3 text-sm hover:text-bandage">
+          <button ref={closeRef} type="button" onClick={onClose} className="rounded-full min-h-11 min-w-11 border border-fog/20 px-3 text-sm hover:text-bandage">
             Close
           </button>
         </div>

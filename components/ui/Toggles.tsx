@@ -4,7 +4,7 @@ import { useStore } from "@/lib/store";
 import { audio } from "@/lib/audio";
 
 const chip =
-  "min-h-11 min-w-11 px-3 text-xs uppercase tracking-widest border transition focus-visible:outline-2 flex items-center justify-center gap-1.5";
+  "min-h-11 min-w-11 rounded-full px-3 text-xs uppercase tracking-widest border transition focus-visible:outline-2 flex items-center justify-center gap-1.5";
 
 export function UnitToggle({ className = "" }: { className?: string }) {
   const unit = useStore((s) => s.unit);

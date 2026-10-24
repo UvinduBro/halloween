@@ -308,7 +308,8 @@ function Ready({ onReady }: { onReady?: () => void }) {
 }
 
 export default function HeroScene({ assets, motion, mobile, flashlight, onSelect, plates, onReady }: HeroSceneProps) {
-  const spread = mobile ? 0.62 : 0.95;
+  // Desktop: the figures stand centre-stage between the title column and the info panel.
+  const spread = mobile ? 0.62 : 0.58;
   const positions: Record<CharacterId, [number, number, number]> = {
     uvi: [-spread, 0, 0],
     ruvi: [spread, 0, 0],
@@ -356,7 +357,7 @@ export default function HeroScene({ assets, motion, mobile, flashlight, onSelect
         <Ready onReady={onReady} />
       </Suspense>
       <FogSheets motion={motion} mobile={mobile} />
-      <FitCamera halfWidth={spread + 0.55} />
+      <FitCamera halfWidth={mobile ? spread + 0.55 : (spread + 0.55) * 2.1} />
       <PlateProjector plates={plates} positions={positions} />
       {!mobile ? (
         <EffectComposer multisampling={0}>

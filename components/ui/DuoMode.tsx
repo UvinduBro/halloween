@@ -18,7 +18,7 @@ export function DuoMode() {
       <p className="mb-6 max-w-2xl text-fog">Both builds at once. The cameras are linked: turn one and the other follows.</p>
       <div className="grid gap-4 md:grid-cols-2">
         {SIDES.map((side) => (
-          <div key={side.id} className="border border-fog/10 bg-ash-2/80 p-3">
+          <div key={side.id} className="panel p-3">
             <div className="mb-2 flex flex-wrap items-center gap-1">
               <h2 className="mr-2 font-heading text-2xl text-bandage">{side.id.toUpperCase()}</h2>
               {side.views.map((v) => (

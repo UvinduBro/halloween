@@ -43,7 +43,7 @@ export function ShoppingList({ items, title }: { items: ShopItem[]; title: strin
           <span className="text-sm text-fog-dim">
             {have} / {items.length}
           </span>
-          <button type="button" onClick={copy} className="min-h-11 border border-fog/20 px-3 text-sm hover:text-bandage">
+          <button type="button" onClick={copy} className="rounded-full min-h-11 border border-fog/20 px-3 text-sm hover:text-bandage">
             {copied ? "Copied" : "Copy as text"}
           </button>
         </div>

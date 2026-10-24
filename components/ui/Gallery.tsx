@@ -54,7 +54,7 @@ export function Gallery() {
           Add photos
         </label>
         <input id={inputId} type="file" accept="image/*" multiple className="sr-only" onChange={(e) => void onFiles(e.target.files)} />
-        <Link href="/booth" className="inline-flex min-h-11 items-center border border-fog/30 px-4 text-fog hover:text-bandage">
+        <Link href="/booth" className="inline-flex rounded-full min-h-11 items-center border border-fog/30 px-4 text-fog hover:text-bandage">
           Take a scare-test photo →
         </Link>
       </div>
@@ -84,7 +84,7 @@ export function Gallery() {
                     defaultValue={p.caption}
                     placeholder="Caption"
                     onBlur={(e) => void updateCaption(p.id, e.target.value)}
-                    className="min-h-11 min-w-0 flex-1 border border-fog/20 bg-ash px-2 text-sm text-bandage"
+                    className="min-h-11 min-w-0 flex-1 rounded-lg border border-fog/20 bg-ash px-2 text-sm text-bandage"
                   />
                   <button
                     type="button"

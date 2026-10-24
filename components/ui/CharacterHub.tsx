@@ -21,6 +21,8 @@ import { TemplatesTab } from "./TemplatesTab";
 import dynamic from "next/dynamic";
 import { FitLab } from "./FitLab";
 import { Portal } from "./Portal";
+import { EpisodeHeader } from "./EpisodeHeader";
+import type { PosterArt } from "@/lib/assets";
 
 const StepMode = dynamic(() => import("./StepMode").then((m) => m.StepMode), { ssr: false });
 
@@ -55,7 +57,7 @@ function UviCutList() {
       <SectionHeading kicker="Measure twice. Cut twice." title="Cut list" id="cutlist" />
       <ul className="space-y-3 md:hidden">
         {U.helmetCutList.map((r) => (
-          <li key={r.piece} className="border border-fog/10 bg-ash-2/80 p-4">
+          <li key={r.piece} className="panel p-4">
             <h3 className="font-heading text-lg text-bandage">
               {r.piece} <span className="text-sm text-fog-dim">· {r.qty}</span>
             </h3>
@@ -133,15 +135,15 @@ function RuviMaskExtras() {
   );
 }
 
-export function CharacterHub({ character }: { character: CharacterId }) {
+export function CharacterHub({ character, posters }: { character: CharacterId; posters?: (PosterArt | null)[] }) {
   return (
     <VarsProvider character={character}>
-      <HubInner character={character} />
+      <HubInner character={character} posters={posters} />
     </VarsProvider>
   );
 }
 
-function HubInner({ character }: { character: CharacterId }) {
+function HubInner({ character, posters }: { character: CharacterId; posters?: (PosterArt | null)[] }) {
   const c = config[character];
   const [stepMode, setStepMode] = useState<{ group: StepGroup; index: number } | null>(null);
   const allGroups = useMemo(() => [...c.groups, ...c.paint], [c]);
@@ -305,7 +307,7 @@ function HubInner({ character }: { character: CharacterId }) {
           <SectionHeading kicker="Eight nights" title={`${c.meta.wearer}'s schedule`} />
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <Countdown compact />
-            <Link href="/progress" className="min-h-11 border border-fog/20 px-3 py-2.5 text-sm hover:text-bandage">
+            <Link href="/progress" className="rounded-full min-h-11 border border-fog/20 px-3 py-2.5 text-sm hover:text-bandage">
               Combined board →
             </Link>
           </div>
@@ -329,14 +331,9 @@ function HubInner({ character }: { character: CharacterId }) {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
-      <header className="py-10 sm:py-14">
-        <p className="font-heading text-sm uppercase tracking-[0.35em] text-sick">
-          Worn by {c.meta.wearer} · {c.meta.build}
-        </p>
-        <h1 className="glitch mt-2 font-heading text-6xl text-bandage sm:text-8xl">{c.meta.name}</h1>
-        <p className="flicker mt-3 font-heading text-2xl text-blood-text">{c.meta.tagline}</p>
-      </header>
+    <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
+      <EpisodeHeader meta={c.meta} groups={allGroups} poster={posters?.[0] ?? null} thumbs={posters?.slice(1) ?? []} onPlay={openStepMode} />
+      <div className="h-8" />
       <Tabs tabs={tabs} label={`${c.meta.name} build sections`} />
       {stepMode && (
         <Portal>

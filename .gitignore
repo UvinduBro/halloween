@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated poster frames (scripts/slice-frames.mjs)
+/public/characters/generated/

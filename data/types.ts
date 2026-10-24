@@ -91,6 +91,16 @@ export interface CharacterMeta {
   wearer: string;
   build: string;
   tagline: string;
+  /** "Episode" framing used by the poster-style headers. */
+  episode: {
+    number: string;
+    genre: string;
+    rating: string;
+    runtime: string;
+    logline: string;
+    /** Second, outlined title line under the name. */
+    subtitle: string;
+  };
   overview: string[];
   accent: string;
 }

@@ -49,7 +49,7 @@ export function StepList({
           const checked = !!checks[id];
           const preset = s.timer ? timers.find((t) => t.id === s.timer) : undefined;
           return (
-            <li key={s.id} className={`border bg-ash-2/80 p-4 transition ${checked ? "border-sick/30 opacity-70" : "border-fog/10"}`}>
+            <li key={s.id} className={`panel p-4 transition ${checked ? "opacity-60" : ""}`}>
               <div className="flex gap-3">
                 <label className="flex min-h-11 min-w-11 cursor-pointer items-start justify-center pt-0.5">
                   <input

@@ -25,7 +25,7 @@ export function TemplatesTab({ character }: { character: CharacterId }) {
         labels (A1, A2, B1…). Page 1 has a 10 cm calibration square.
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <Link href={`/${character}/print`} className="inline-flex min-h-11 items-center bg-blood px-5 font-heading text-lg text-bandage hover:bg-blood-bright">
+        <Link href={`/${character}/print`} className="inline-flex rounded-full min-h-11 items-center bg-blood px-5 font-heading text-lg text-bandage hover:bg-blood-bright">
           Open print view ({totalPages} pages)
         </Link>
         <p className="text-sm text-sick">Check your printer scale: print at 100% / “Actual size”, never “Fit to page”.</p>
@@ -35,7 +35,7 @@ export function TemplatesTab({ character }: { character: CharacterId }) {
           const t = tilePiece(p.bbox);
           const pages = contentTiles(p.outline, t).length;
           return (
-            <li key={p.id} className="border border-fog/10 bg-ash-2/80">
+            <li key={p.id} className="panel overflow-hidden">
               <PieceThumb piece={p} unit={unit} />
               <div className="p-4">
                 <h3 className="font-heading text-lg text-bandage">{p.name}</h3>

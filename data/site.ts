@@ -50,3 +50,32 @@ export const heroFigures: Record<CharacterId, HeroFigureConfig> = {
 export const sheetFrames = ["front ¾", "side right", "side left", "back"] as const;
 /** Auto-turn order: front → side → back → other side. */
 export const autoTurnOrder = [0, 1, 3, 2];
+
+export interface CastMember {
+  id: CharacterId | "handler";
+  name: string;
+  role: string;
+  bio: string;
+}
+
+/** "The cast" cards on the landing dossier. Bios may use unit tokens. */
+export const cast: CastMember[] = [
+  {
+    id: "uvi",
+    name: "Uvi",
+    role: "The Executioner",
+    bio: "Carries {88} of laminated cardboard on a hard hat and sees the world through a {10} slot. Never runs. Drags the blade.",
+  },
+  {
+    id: "ruvi",
+    name: "Ruvi",
+    role: "The Night Nurse",
+    bio: "Wears a plaster head two sizes too big and a dress that was white once. Breathes through chiffon. Twitches when you blink.",
+  },
+  {
+    id: "handler",
+    name: "The Handler",
+    role: "Keeps them alive",
+    bio: "Walks beside the helmet, calls out doorways, fans and stairs, and carries the water, the glue and the zip ties.",
+  },
+];

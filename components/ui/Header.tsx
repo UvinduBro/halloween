@@ -23,7 +23,7 @@ export function Header() {
         Skip to content
       </a>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5">
-        <Link href="/" className="flex min-h-11 items-center font-heading text-xl text-bandage" aria-label="UVI & RUVI home">
+        <Link href="/" className="flex rounded-full min-h-11 items-center font-heading text-xl text-bandage" aria-label="UVI & RUVI home">
           UVI <span className="mx-1.5 text-blood-text">&amp;</span> RUVI
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
@@ -32,7 +32,7 @@ export function Header() {
               key={l.href}
               href={l.href}
               aria-current={pathname.startsWith(l.href) ? "page" : undefined}
-              className={`flex min-h-11 items-center px-3 text-sm transition ${pathname.startsWith(l.href) ? "text-bandage underline decoration-blood-bright underline-offset-8" : "text-fog-dim hover:text-bandage"}`}
+              className={`flex rounded-full min-h-11 items-center px-3 text-sm transition ${pathname.startsWith(l.href) ? "text-bandage underline decoration-blood-bright underline-offset-8" : "text-fog-dim hover:text-bandage"}`}
             >
               {l.label}
             </Link>
@@ -45,7 +45,7 @@ export function Header() {
         </div>
         <button
           type="button"
-          className="flex min-h-11 min-w-11 items-center justify-center border border-fog/20 px-3 text-sm lg:hidden"
+          className="flex rounded-full min-h-11 min-w-11 items-center justify-center border border-fog/20 px-3 text-sm lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((o) => !o)}
