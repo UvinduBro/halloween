@@ -607,3 +607,16 @@ export const uviSources: SourceLink[] = [
 ];
 
 export const uviSteps: StepGroup[] = [helmetSteps, knifeSteps, skirtSteps];
+
+/** Key numbers shown live in the fit lab (tokens resolve from lib/uvi.ts → uviVars). */
+export const uviLiveNumbers: { label: string; text: string }[] = [
+  { label: "Scale factor", text: "× {n:$k}" },
+  { label: "Helmet", text: "{$helmetHeight} tall · {$helmetWidth} wide · {$helmetDepth} deep" },
+  { label: "Tip off the ground", text: "{$tipHeight|0}" },
+  { label: "Head clearance", text: "{$clearance} (inside the laminated wall)" },
+  { label: "Centre front", text: "{$FLFR} bottom, {$TFL} sides" },
+  { label: "Side panel", text: "{$MLFL} bottom, {$TML} back, {$TFL} front" },
+  { label: "Back panel", text: "{$KML} bottom, {$TML} outer, {$TK} ridge" },
+  { label: "Vision window", text: "{$winStart} up, {$winHeight} tall, {$winBottomW} → {$winTopW}" },
+  { label: "Skirt", text: "{$skirtWidth|0} wide × {$skirtLength|0} long" },
+];

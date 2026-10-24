@@ -623,3 +623,15 @@ export const ruviSources: SourceLink[] = [
 ];
 
 export const ruviSteps: StepGroup[] = [maskSteps, dressSteps, capSteps, propSteps];
+
+/** Key numbers shown live in the fit lab (tokens resolve from lib/ruvi.ts → ruviVars). */
+export const ruviLiveNumbers: { label: string; text: string }[] = [
+  { label: "Balloon", text: "{$balloonCirc|0} round" },
+  { label: "Shell", text: "{$shellW} wide × {$shellH} tall × {$shellD} deep" },
+  { label: "Smallest gap round the head", text: "{$minGap}" },
+  { label: "Eye windows", text: "{4} × {2.5}, {$eyeUp} up, {$eyeSpacing} apart" },
+  { label: "Vent", text: "{4} × {6}, {$ventFrom} to {$ventTo} up" },
+  { label: "Half widths", text: "bust {$halfBust} · waist {$halfWaist} · hips {$halfHips} · hem {$halfHem}" },
+  { label: "Sleeve", text: "opening {$sleeveOpening}, shoulder point {$shoulderPoint}" },
+  { label: "Dress length", text: "{$dressLength}" },
+];
