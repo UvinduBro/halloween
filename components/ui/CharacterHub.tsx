@@ -194,7 +194,7 @@ function HubInner({ character }: { character: CharacterId }) {
           <p className="mb-6 max-w-3xl text-fog">
             Enter {c.meta.wearer}&apos;s measurements. The 3D model, every template dimension and every number on this page update as you type.
           </p>
-          <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+          <div className="grid items-start gap-6 lg:grid-cols-[1.3fr_1fr]">
             <MeasureForm character={character} />
             <div className="space-y-4">
               <FitLab character={character} />

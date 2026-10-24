@@ -203,7 +203,7 @@ export default function BuildViewer({
   return (
     <ViewerContext.Provider value={settings}>
       <LabelContext.Provider value={registry}>
-      <div className={`flex flex-col gap-3 ${className}`}>
+      <div className={`flex flex-col gap-3 ${compact ? "h-full" : ""} ${className}`}>
         {!compact && (
           <div className="flex flex-wrap gap-1" role="group" aria-label="Camera presets">
             {PRESETS.map((p) => (
@@ -223,7 +223,7 @@ export default function BuildViewer({
           </div>
         )}
         <div
-          className={`relative w-full overflow-hidden border border-fog/10 ${compact ? "h-full min-h-56" : "h-[58vh] min-h-[340px] sm:h-[520px]"}`}
+          className={`relative w-full overflow-hidden border border-fog/10 ${compact ? "min-h-56 flex-1" : "h-[58vh] min-h-[340px] sm:h-[520px]"}`}
           style={{ background: dark ? "#050404" : "radial-gradient(ellipse at 50% 40%, #2a2420, #0e0d0c 75%)" }}
         >
           <Canvas

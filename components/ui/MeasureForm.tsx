@@ -82,7 +82,7 @@ export function MeasureForm({ character }: { character: CharacterId }) {
 
   if (character === "uvi") {
     return (
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid content-start items-start gap-3 md:grid-cols-2">
         {uviMeasureFields.map((f) => (
           <Field key={f.key} field={f} value={uvi[f.key]} onChange={(cm) => setUvi({ [f.key]: cm } as Partial<UviMeasurements>)} />
         ))}
@@ -90,7 +90,7 @@ export function MeasureForm({ character }: { character: CharacterId }) {
     );
   }
   return (
-    <div className="grid gap-3 md:grid-cols-2">
+    <div className="grid content-start items-start gap-3 md:grid-cols-2">
       {ruviMeasureFields.map((f) => (
         <Field key={f.key} field={f} value={ruvi[f.key]} onChange={(cm) => setRuvi({ [f.key]: cm } as Partial<RuviMeasurements>)} />
       ))}
